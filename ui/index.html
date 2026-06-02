@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Security Trend Intel</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div class="brand">
+          <div class="brand__title">AI Security Trend Intel</div>
+          <div class="brand__subtitle">
+            Тренды LLM/AI-агентов и безопасность (12 недель · квартальный срез)
+          </div>
+        </div>
+        <div class="header__meta">
+          <span id="lastUpdated" class="pill"></span>
+        </div>
+      </header>
+
+      <main class="grid">
+        <section class="card card--span2">
+          <div class="card__head">
+            <h2 class="card__title">Динамика упоминаний (топ‑5 фраз)</h2>
+            <div class="card__hint">По неделям, последние 12 недель</div>
+          </div>
+          <div class="chartWrap">
+            <canvas id="mentionsChart" aria-label="График упоминаний" role="img"></canvas>
+          </div>
+          <div class="legendHint">
+            Наведи на линию, чтобы увидеть значение за неделю.
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__head">
+            <h2 class="card__title">Топ‑5 документов за квартал</h2>
+            <div class="card__hint">Самые цитируемые/влиятельные</div>
+          </div>
+          <ol id="topDocs" class="list list--docs"></ol>
+        </section>
+
+        <section class="card">
+          <div class="card__head">
+            <h2 class="card__title">Топ‑5 источников по числу новостей</h2>
+            <div class="card__hint">За последние 12 недель</div>
+          </div>
+          <ol id="topSources" class="list list--sources"></ol>
+        </section>
+
+        <section class="card card--span2">
+          <div class="card__head">
+            <h2 class="card__title">Прогноз на следующий квартал</h2>
+            <div class="card__hint">Гипотеза на основе тренда упоминаний</div>
+          </div>
+          <p id="forecast" class="forecast"></p>
+          <div class="divider"></div>
+          <div class="note">
+            Примечание: это демо‑UI. Позже заменим sample‑данные на результаты твоего пайплайна (ingest → normalize → analyze).
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>© 2026 AI Security Trend Intel</span>
+        <span class="footer__sep">·</span>
+        <span>Фокус: LLM/AI Agent Security</span>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
+

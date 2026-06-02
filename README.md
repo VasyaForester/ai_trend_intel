@@ -37,6 +37,19 @@ After you add the implementation code, typical steps will be:
 2. Configure source lists and any optional API keys
 3. Run ingestion + analysis pipeline commands
 
+## UI (demo)
+
+The repository includes a lightweight browser UI in `ui/` (no build step).
+
+Run a local server from the repo root:
+
+```powershell
+python -m http.server 8000
+```
+
+Then open:
+- `http://localhost:8000/ui/`
+
 ## GitHub upload pipeline (Windows + PowerShell, verified)
 
 From the repo root (this folder):
