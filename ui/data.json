@@ -20,34 +20,39 @@
   },
   "topDocs": [
     {
-      "title": "OWASP Top 10 for Large Language Model Applications",
-      "publisher": "OWASP",
-      "why": "Список рисков и рекомендуемых мер контроля для LLM-приложений.",
-      "url": "https://owasp.org/www-project-top-ten-for-large-language-model-applications/"
+      "title": "State of Agent Security — Q2 2026 (Version 2.0)",
+      "publisher": "AgentGraph",
+      "why": "Квартальный срез по уязвимостям и рискам инфраструктуры AI-агентов (экосистема навыков, реестры, supply-chain).",
+      "date": "2026-05-12",
+      "url": "https://agentgraph.co/state-of-agent-security-2026-v1.pdf"
     },
     {
-      "title": "OWASP AI Security and Privacy Guide",
-      "publisher": "OWASP",
-      "why": "Практический гид по AI security и privacy.",
-      "url": "https://owasp.org/www-project-ai-security-and-privacy-guide/"
+      "title": "Project Glasswing: An initial update",
+      "publisher": "Anthropic",
+      "why": "Свежий отчёт о практиках киберзащиты на фоне роста возможностей моделей: масштабирование поиска уязвимостей, процесс CVD, bottleneck triage/patching.",
+      "date": "2026-05-22",
+      "url": "https://www.anthropic.com/research/glasswing-initial-update"
     },
     {
-      "title": "AI Risk Management Framework (AI RMF)",
-      "publisher": "NIST",
-      "why": "Рамка управления рисками (политики, контрольные меры, аудит).",
-      "url": "https://www.nist.gov/itl/ai-risk-management-framework"
+      "title": "Strengthening our Frontier Safety Framework (FSF 3.1 update)",
+      "publisher": "Google DeepMind",
+      "why": "Обновление framework’а по управлению рисками frontier-моделей: расширение доменов рисков и протоколов safety/security, актуально для агентных систем.",
+      "date": "2026-04-17",
+      "url": "https://deepmind.google/blog/strengthening-our-frontier-safety-framework/"
     },
     {
-      "title": "MITRE ATLAS",
-      "publisher": "MITRE",
-      "why": "Каталог тактик/техник атак на AI (полезно для моделирования угроз и контроля).",
-      "url": "https://atlas.mitre.org/"
+      "title": "AI Inference Servers Are the New Internet Edge (LMDeploy SSRF case study)",
+      "publisher": "Cloud Security Alliance (CSA)",
+      "why": "Q2 2026 разбор эксплойта/паттернов уязвимостей в inference‑серверах (SSRF, unsafe deserialization, default auth) и практические рекомендации по ремедиации.",
+      "date": "2026-04-26",
+      "url": "https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/04/CSA_research_note_lmdeploy_inference_server_ssrf_20260426-csa-styled.pdf"
     },
     {
-      "title": "Frontier lab research streams (OpenAI/Anthropic/DeepMind/Meta)",
-      "publisher": "Multiple",
-      "why": "Обновления по alignment/safety, агентам, оценкам и практике безопасного внедрения.",
-      "url": "https://openai.com/research"
+      "title": "Frontier AI Trends Report",
+      "publisher": "UK AI Security Institute (AISI)",
+      "why": "Публичный обзор наблюдаемых трендов в frontier‑оценках и сопутствующих safeguards; удобный “квартальный контекст” для governance и risk tracking.",
+      "date": "2026-04-01",
+      "url": "https://www.aisi.gov.uk/frontier-ai-trends-report"
     }
   ],
   "topSources": [
