@@ -47,11 +47,11 @@ const fallbackData = {
     { key: "secure rag", color: "#34d399" },
   ],
   seriesByKeyword: {
-    "prompt injection": [18, 19, 21, 24, 26, 29, 31, 33, 34, 36, 37, 39],
-    mcp: [6, 7, 9, 10, 11, 12, 15, 16, 18, 20, 22, 24],
-    "ai agent": [10, 11, 12, 13, 15, 18, 20, 22, 23, 25, 28, 30],
-    "self-evolving agent": [2, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 10],
-    "secure rag": [7, 7, 8, 9, 10, 11, 11, 12, 13, 14, 14, 15]
+    "prompt injection": [22, 19, 25, 21, 28, 24, 31, 27, 33, 29, 35, 32],
+    mcp: [5, 8, 6, 11, 9, 14, 12, 16, 13, 18, 15, 20],
+    "ai agent": [14, 12, 16, 13, 18, 15, 21, 19, 23, 20, 26, 24],
+    "self-evolving agent": [3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7],
+    "secure rag": [9, 8, 10, 9, 11, 10, 12, 11, 13, 12, 14, 13]
   },
   topDocs: [],
   topSources: []
@@ -160,6 +160,11 @@ function renderChart(keywords, seriesByKeyword) {
         tooltip: {
           callbacks: {
             title: (items) => `Неделя от ${items?.[0]?.label ?? ""}`,
+            label: (ctx) => {
+              const n = ctx.parsed?.y ?? 0;
+              const label = ctx.dataset?.label ?? "";
+              return `${label}: ${n} сообщ. за неделю`;
+            },
           },
         },
       },
@@ -170,6 +175,11 @@ function renderChart(keywords, seriesByKeyword) {
         },
         y: {
           beginAtZero: true,
+          title: {
+            display: true,
+            text: "Сообщений за неделю",
+            color: "rgba(255,255,255,.62)",
+          },
           ticks: { color: "rgba(255,255,255,.62)" },
           grid: { color: "rgba(255,255,255,.06)" },
         },
