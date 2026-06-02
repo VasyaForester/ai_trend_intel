@@ -78,11 +78,13 @@ function renderTopDocs(topDocs) {
     return;
   }
   topDocs.forEach((d) => {
+    const dateText = formatDocDate(d.date);
     const li = document.createElement("li");
     li.innerHTML = `
       <div class="docTitle">${escapeHtml(d.title)}</div>
       <div class="docMeta">
         <span>${escapeHtml(d.publisher)}</span>
+        ${dateText ? `<span> · </span><span>${escapeHtml(dateText)}</span>` : ""}
         <span> · </span>
         <a class="docLink" href="${d.url}" target="_blank" rel="noreferrer">Открыть</a>
       </div>
@@ -184,6 +186,14 @@ function renderMeta(meta) {
   const yyyy = d.getFullYear();
   const suffix = meta?.note ? ` · ${meta.note}` : "";
   el.textContent = `Обновлено: ${dd}.${mm}.${yyyy}${suffix}`;
+}
+
+function formatDocDate(value) {
+  if (!value) return "";
+  // Expect "YYYY-MM-DD"
+  const m = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return String(value);
+  return `${m[3]}.${m[2]}.${m[1]}`;
 }
 
 function escapeHtml(str) {
