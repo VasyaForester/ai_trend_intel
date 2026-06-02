@@ -77,24 +77,52 @@ When ingesting, map each item to:
 These are good starting points to wire into ingestion connectors. You should verify
 availability (RSS endpoints, pagination, robots.txt, and terms of service) before automating collection.
 
-### LLM and agent security risk guidance
-- OWASP - Top 10 for Large Language Model Applications: https://owasp.org/www-project-top-ten-for-large-language-model-applications/
-- OWASP - Main site (search within for LLM-related items): https://owasp.org/
-
-### Risk management frameworks and governance
-- NIST - AI Risk Management Framework (AI RMF): https://www.nist.gov/itl/ai-risk-management-framework
-- NIST AI-related security publications (start from NIST AI index pages): https://www.nist.gov/itl/ai
-
 ### Research repositories (paper discovery)
-- arXiv search (use topic keyword queries, e.g. for security and LLM-related terms): https://arxiv.org/search/
-- arXiv (category landing pages, useful if you later build category-specific queries): https://arxiv.org/archive/
+- arXiv (home): https://arxiv.org/
+- arXiv search (use keyword queries): https://arxiv.org/search/
+- arXiv archive (category index): https://arxiv.org/archive/
+- arXiv cs.CR (recent): https://arxiv.org/list/cs.CR/recent
+- arXiv cs.AI (recent): https://arxiv.org/list/cs.AI/recent
+- IACR ePrint (cryptography/security papers): https://eprint.iacr.org/
 
-### Public news and engineering writeups
-- GitHub Security Lab (AI/ML-adjacent security posts often appear here): https://securitylab.github.com/
-- CERT-style guidance (start from CERT/CSIRT directories and search by AI/LLM terms): https://www.cert.org/
+### Frontier labs and research blogs (LLM/agent context)
+- OpenAI Research: https://openai.com/research
+- Anthropic Research: https://www.anthropic.com/research
+- Google DeepMind Blog: https://deepmind.google/discover/blog/
+- Meta AI Blog: https://ai.meta.com/blog/
 
-### Tooling and frameworks (safety controls)
-- OWASP guidance and example libraries: https://owasp.org/
-- Vendor safety and security pages (use your chosen providers and track their change logs): https://openai.com/safety/
+### Security and engineering blogs (practical trends & mitigations)
+- Microsoft Security Blog: https://www.microsoft.com/en-us/security/blog/
+- Trail of Bits: https://blog.trailofbits.com/
+- HiddenLayer Research: https://hiddenlayer.com/research/
+- Protect AI Blog: https://protectai.com/blog
+- Lakera Blog: https://www.lakera.ai/blog
+- Robust Intelligence Blog (archive): https://www.robustintelligence.com/blog
+- Cloudflare Security tag: https://blog.cloudflare.com/tag/security/
+- GitHub Security: https://github.blog/security/
+- Google Project Zero: https://googleprojectzero.blogspot.com/
+- GitHub Security Lab: https://securitylab.github.com/
+
+### LLM and AI security risk guidance (standards / playbooks / threat catalogs)
+- OWASP - Top 10 for Large Language Model Applications: https://owasp.org/www-project-top-ten-for-large-language-model-applications/
+- OWASP - AI Security and Privacy Guide: https://owasp.org/www-project-ai-security-and-privacy-guide/
+- MITRE ATLAS: https://atlas.mitre.org/
+- NIST - AI Risk Management Framework (AI RMF): https://www.nist.gov/itl/ai-risk-management-framework
+- AI Now Institute: https://ainowinstitute.org/
+- UK AISI: https://www.aisi.gov.uk/
+
+### Conferences and professional publications
+- USENIX Security Symposium: https://www.usenix.org/conference/usenixsecurity
+- IEEE Security & Privacy Magazine: https://www.computer.org/csdl/magazine/sp
+
+### Media & community signals (use carefully; prefer referenced posts)
+- WIRED: https://www.wired.com
+- Reddit /r/LocalLLaMA: https://www.reddit.com/r/LocalLLaMA/
+- Reddit /r/MachineLearning: https://www.reddit.com/r/MachineLearning/
+- Reddit /r/AI_Safety: https://www.reddit.com/r/AI_Safety/
+- Reddit /r/llmsecurity: https://www.reddit.com/r/llmsecurity/
+- Simon Willison: https://simonwillison.net/
+- Import AI (newsletter): https://importai.substack.com/
+- The Gradient: https://thegradient.pub/
 
 
