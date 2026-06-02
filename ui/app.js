@@ -29,15 +29,6 @@ function linearTrendScore(series) {
   return (n * sumXY - sumX * sumY) / denom;
 }
 
-// Demo data (replace later with pipeline output)
-const keywords = [
-  { key: "prompt injection", color: "#22d3ee" },
-  { key: "mcp", color: "#a855f7" },
-  { key: "ai agent", color: "#60a5fa" },
-  { key: "self-evolving agent", color: "#f59e0b" },
-  { key: "secure rag", color: "#34d399" },
-];
-
 const now = new Date();
 const startWeek = isoWeekStart(new Date(now.getTime() - 11 * 7 * 24 * 3600 * 1000));
 const weekLabels = Array.from({ length: 12 }, (_, i) => {
@@ -45,59 +36,47 @@ const weekLabels = Array.from({ length: 12 }, (_, i) => {
   return formatWeekLabel(d);
 });
 
-// Build plausible 12-week series (deterministic-ish)
-const seriesByKeyword = {
-  "prompt injection": [18, 19, 21, 24, 26, 29, 31, 33, 34, 36, 37, 39],
-  "mcp":             [6,  7,  9,  10, 11, 12, 15, 16, 18, 20, 22, 24],
-  "ai agent":        [10, 11, 12, 13, 15, 18, 20, 22, 23, 25, 28, 30],
-  "self-evolving agent": [2, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 10],
-  "secure rag":      [7,  7,  8,  9,  10, 11, 11, 12, 13, 14, 14, 15],
+// Demo data (fallback). Primary path is loading `ui/data.json`.
+const fallbackData = {
+  meta: { generatedAt: null, windowWeeks: 12, note: "Demo fallback data." },
+  keywords: [
+    { key: "prompt injection", color: "#22d3ee" },
+    { key: "mcp", color: "#a855f7" },
+    { key: "ai agent", color: "#60a5fa" },
+    { key: "self-evolving agent", color: "#f59e0b" },
+    { key: "secure rag", color: "#34d399" },
+  ],
+  seriesByKeyword: {
+    "prompt injection": [18, 19, 21, 24, 26, 29, 31, 33, 34, 36, 37, 39],
+    mcp: [6, 7, 9, 10, 11, 12, 15, 16, 18, 20, 22, 24],
+    "ai agent": [10, 11, 12, 13, 15, 18, 20, 22, 23, 25, 28, 30],
+    "self-evolving agent": [2, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 10],
+    "secure rag": [7, 7, 8, 9, 10, 11, 11, 12, 13, 14, 14, 15]
+  },
+  topDocs: [],
+  topSources: []
 };
 
-const topDocs = [
-  {
-    title: "OWASP Top 10 for Large Language Model Applications (latest edition)",
-    publisher: "OWASP",
-    why: "Дефакто-список рисков и контрольных мер для LLM-приложений.",
-    url: "https://owasp.org/www-project-top-ten-for-large-language-model-applications/",
-  },
-  {
-    title: "Secure AI / GenAI guidance (security posture & controls)",
-    publisher: "Google",
-    why: "Практики по безопасному использованию GenAI и управлению рисками.",
-    url: "https://cloud.google.com/security",
-  },
-  {
-    title: "AI Risk Management Framework (AI RMF) and related AI guidance",
-    publisher: "NIST",
-    why: "Рамка управления рисками, полезна для комплаенса и внутренней политики.",
-    url: "https://www.nist.gov/itl/ai-risk-management-framework",
-  },
-  {
-    title: "Security Research / AI-adjacent advisories and writeups",
-    publisher: "GitHub Security Lab",
-    why: "Посты и исследования, которые часто отражают практические тренды экосистемы.",
-    url: "https://securitylab.github.com/",
-  },
-  {
-    title: "Industry outlook on AI/LLM security (quarterly-style overview)",
-    publisher: "Gartner (example placeholder)",
-    why: "Высокоуровневые тренды рынка; заменить на конкретный публичный документ при подключении источников.",
-    url: "https://www.gartner.com/en",
-  },
-];
+async function loadData() {
+  try {
+    const res = await fetch("./data.json", { cache: "no-store" });
+    if (!res.ok) return fallbackData;
+    const json = await res.json();
+    return { ...fallbackData, ...json };
+  } catch {
+    return fallbackData;
+  }
+}
 
-const topSources = [
-  { name: "OpenAI", count: 42 },
-  { name: "Hacker News", count: 37 },
-  { name: "OWASP", count: 24 },
-  { name: "NIST", count: 18 },
-  { name: "GitHub Security Lab", count: 15 },
-];
-
-function renderTopDocs() {
+function renderTopDocs(topDocs) {
   const el = document.getElementById("topDocs");
   el.innerHTML = "";
+  if (!Array.isArray(topDocs) || topDocs.length === 0) {
+    const li = document.createElement("li");
+    li.innerHTML = `<div class="docMeta">Пока нет данных. Подключи пайплайн и обнови <code>ui/data.json</code>.</div>`;
+    el.appendChild(li);
+    return;
+  }
   topDocs.forEach((d) => {
     const li = document.createElement("li");
     li.innerHTML = `
@@ -113,9 +92,15 @@ function renderTopDocs() {
   });
 }
 
-function renderTopSources() {
+function renderTopSources(topSources) {
   const el = document.getElementById("topSources");
   el.innerHTML = "";
+  if (!Array.isArray(topSources) || topSources.length === 0) {
+    const li = document.createElement("li");
+    li.innerHTML = `<div class="docMeta">Пока нет данных. Подключи пайплайн и обнови <code>ui/data.json</code>.</div>`;
+    el.appendChild(li);
+    return;
+  }
   topSources.forEach((s) => {
     const li = document.createElement("li");
     li.innerHTML = `
@@ -128,7 +113,7 @@ function renderTopSources() {
   });
 }
 
-function renderForecast() {
+function renderForecast(keywords, seriesByKeyword) {
   const scores = keywords.map((k) => ({
     key: k.key,
     score: linearTrendScore(seriesByKeyword[k.key] || []),
@@ -145,7 +130,7 @@ function renderForecast() {
     `политики для RAG/контекста, мониторинг инцидентов и тестирование защитных мер на собственных сценариях.`;
 }
 
-function renderChart() {
+function renderChart(keywords, seriesByKeyword) {
   const ctx = document.getElementById("mentionsChart");
   const datasets = keywords.map((k) => ({
     label: k.key,
@@ -191,13 +176,14 @@ function renderChart() {
   });
 }
 
-function renderMeta() {
+function renderMeta(meta) {
   const el = document.getElementById("lastUpdated");
-  const d = new Date();
+  const d = meta?.generatedAt ? new Date(meta.generatedAt) : new Date();
   const dd = String(d.getDate()).padStart(2, "0");
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const yyyy = d.getFullYear();
-  el.textContent = `Обновлено: ${dd}.${mm}.${yyyy} (demo)`;
+  const suffix = meta?.note ? ` · ${meta.note}` : "";
+  el.textContent = `Обновлено: ${dd}.${mm}.${yyyy}${suffix}`;
 }
 
 function escapeHtml(str) {
@@ -209,9 +195,11 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-renderMeta();
-renderChart();
-renderTopDocs();
-renderTopSources();
-renderForecast();
+loadData().then((data) => {
+  renderMeta(data.meta);
+  renderChart(data.keywords, data.seriesByKeyword);
+  renderTopDocs(data.topDocs);
+  renderTopSources(data.topSources);
+  renderForecast(data.keywords, data.seriesByKeyword);
+});
 

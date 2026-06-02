@@ -1,0 +1,61 @@
+{
+  "meta": {
+    "generatedAt": "2026-06-02T00:00:00Z",
+    "windowWeeks": 12,
+    "note": "Sample data. Replace this file with pipeline output."
+  },
+  "keywords": [
+    { "key": "prompt injection", "color": "#22d3ee" },
+    { "key": "mcp", "color": "#a855f7" },
+    { "key": "ai agent", "color": "#60a5fa" },
+    { "key": "self-evolving agent", "color": "#f59e0b" },
+    { "key": "secure rag", "color": "#34d399" }
+  ],
+  "seriesByKeyword": {
+    "prompt injection": [18, 19, 21, 24, 26, 29, 31, 33, 34, 36, 37, 39],
+    "mcp": [6, 7, 9, 10, 11, 12, 15, 16, 18, 20, 22, 24],
+    "ai agent": [10, 11, 12, 13, 15, 18, 20, 22, 23, 25, 28, 30],
+    "self-evolving agent": [2, 2, 3, 3, 4, 5, 6, 6, 7, 8, 9, 10],
+    "secure rag": [7, 7, 8, 9, 10, 11, 11, 12, 13, 14, 14, 15]
+  },
+  "topDocs": [
+    {
+      "title": "OWASP Top 10 for Large Language Model Applications",
+      "publisher": "OWASP",
+      "why": "Список рисков и рекомендуемых мер контроля для LLM-приложений.",
+      "url": "https://owasp.org/www-project-top-ten-for-large-language-model-applications/"
+    },
+    {
+      "title": "OWASP AI Security and Privacy Guide",
+      "publisher": "OWASP",
+      "why": "Практический гид по AI security и privacy.",
+      "url": "https://owasp.org/www-project-ai-security-and-privacy-guide/"
+    },
+    {
+      "title": "AI Risk Management Framework (AI RMF)",
+      "publisher": "NIST",
+      "why": "Рамка управления рисками (политики, контрольные меры, аудит).",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework"
+    },
+    {
+      "title": "MITRE ATLAS",
+      "publisher": "MITRE",
+      "why": "Каталог тактик/техник атак на AI (полезно для моделирования угроз и контроля).",
+      "url": "https://atlas.mitre.org/"
+    },
+    {
+      "title": "Frontier lab research streams (OpenAI/Anthropic/DeepMind/Meta)",
+      "publisher": "Multiple",
+      "why": "Обновления по alignment/safety, агентам, оценкам и практике безопасного внедрения.",
+      "url": "https://openai.com/research"
+    }
+  ],
+  "topSources": [
+    { "name": "OpenAI Research", "count": 42, "url": "https://openai.com/research" },
+    { "name": "Anthropic Research", "count": 37, "url": "https://www.anthropic.com/research" },
+    { "name": "Microsoft Security Blog", "count": 24, "url": "https://www.microsoft.com/en-us/security/blog/" },
+    { "name": "Trail of Bits", "count": 18, "url": "https://blog.trailofbits.com/" },
+    { "name": "arXiv (cs.CR/cs.AI)", "count": 15, "url": "https://arxiv.org/list/cs.CR/recent" }
+  ]
+}
+
