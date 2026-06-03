@@ -1,0 +1,40 @@
+{
+  "description": "Curated Q2 2026 AI security documents with links verified before inclusion. Used by scripts/collect_hn.py to populate ui/data.json topDocs.",
+  "documents": [
+    {
+      "title": "State of Agent Security — Q2 2026 (Version 2.0)",
+      "publisher": "AgentGraph",
+      "why": "Quarterly snapshot of vulnerabilities and infrastructure risks around AI agents, agent registries, and supply-chain surfaces.",
+      "date": "2026-05-12",
+      "url": "https://agentgraph.co/state-of-agent-security-2026-v1.pdf"
+    },
+    {
+      "title": "Project Glasswing: An initial update",
+      "publisher": "Anthropic",
+      "why": "Fresh field report on AI-assisted cyber defense, vulnerability discovery at scale, coordinated disclosure, triage, and patching bottlenecks.",
+      "date": "2026-05-22",
+      "url": "https://www.anthropic.com/research/glasswing-initial-update"
+    },
+    {
+      "title": "Strengthening our Frontier Safety Framework (FSF 3.1 update)",
+      "publisher": "Google DeepMind",
+      "why": "Q2 update to a frontier model risk framework, including expanded domains and tracked capability levels relevant to agentic systems.",
+      "date": "2026-04-17",
+      "url": "https://deepmind.google/blog/strengthening-our-frontier-safety-framework/"
+    },
+    {
+      "title": "AI Inference Servers Are the New Internet Edge (LMDeploy SSRF case study)",
+      "publisher": "Cloud Security Alliance (CSA)",
+      "why": "Q2 2026 analysis of inference-server exposure patterns, including SSRF, unsafe deserialization, default-auth problems, and remediation guidance.",
+      "date": "2026-04-26",
+      "url": "https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/04/CSA_research_note_lmdeploy_inference_server_ssrf_20260426-csa-styled.pdf"
+    },
+    {
+      "title": "Frontier AI Trends Report",
+      "publisher": "UK AI Security Institute (AISI)",
+      "why": "Public trend report on frontier AI evaluations and safeguards, useful as quarterly context for governance and risk tracking.",
+      "date": "2026-04-01",
+      "url": "https://www.aisi.gov.uk/frontier-ai-trends-report"
+    }
+  ]
+}

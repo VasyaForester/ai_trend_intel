@@ -1,67 +1,378 @@
 {
   "meta": {
-    "generatedAt": "2026-06-02T00:00:00Z",
+    "generatedAt": "2026-06-03T10:06:39Z",
     "windowWeeks": 12,
-    "note": "Sample data. Replace this file with pipeline output.",
-    "mentionsMetric": "weekly_count"
+    "mentionsMetric": "weekly_count",
+    "source": "Hacker News (Algolia Search API)",
+    "note": "Real, reproducible weekly mention counts from Hacker News stories. Curated Q2 2026 documents are loaded from config/key_documents.json."
   },
+  "weekLabels": [
+    "09.03",
+    "16.03",
+    "23.03",
+    "30.03",
+    "06.04",
+    "13.04",
+    "20.04",
+    "27.04",
+    "04.05",
+    "11.05",
+    "18.05",
+    "25.05"
+  ],
   "keywords": [
-    { "key": "prompt injection", "color": "#22d3ee" },
-    { "key": "mcp", "color": "#a855f7" },
-    { "key": "ai agent", "color": "#60a5fa" },
-    { "key": "self-evolving agent", "color": "#f59e0b" },
-    { "key": "secure rag", "color": "#34d399" }
+    {
+      "key": "Prompt attack (direct)",
+      "color": "#22d3ee"
+    },
+    {
+      "key": "Episodic and semantic memory architectures",
+      "color": "#a855f7"
+    },
+    {
+      "key": "Agent orchestration frameworks",
+      "color": "#60a5fa"
+    },
+    {
+      "key": "Agent-to-Agent (A2A) communication",
+      "color": "#f59e0b"
+    },
+    {
+      "key": "Model Context Protocol (MCP)",
+      "color": "#34d399"
+    }
   ],
   "seriesByKeyword": {
-    "prompt injection": [22, 19, 25, 21, 28, 24, 31, 27, 33, 29, 35, 32],
-    "mcp": [5, 8, 6, 11, 9, 14, 12, 16, 13, 18, 15, 20],
-    "ai agent": [14, 12, 16, 13, 18, 15, 21, 19, 23, 20, 26, 24],
-    "self-evolving agent": [3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7],
-    "secure rag": [9, 8, 10, 9, 11, 10, 12, 11, 13, 12, 14, 13]
+    "Prompt attack (direct)": [
+      27,
+      10,
+      9,
+      7,
+      6,
+      6,
+      8,
+      3,
+      3,
+      1,
+      4,
+      6
+    ],
+    "Episodic and semantic memory architectures": [
+      5,
+      9,
+      2,
+      6,
+      8,
+      3,
+      6,
+      4,
+      4,
+      5,
+      2,
+      5
+    ],
+    "Agent orchestration frameworks": [
+      6,
+      7,
+      10,
+      7,
+      5,
+      5,
+      4,
+      2,
+      4,
+      2,
+      1,
+      2
+    ],
+    "Agent-to-Agent (A2A) communication": [
+      5,
+      3,
+      4,
+      2,
+      4,
+      2,
+      2,
+      2,
+      2,
+      1,
+      0,
+      1
+    ],
+    "Model Context Protocol (MCP)": [
+      6,
+      2,
+      2,
+      2,
+      4,
+      3,
+      2,
+      1,
+      2,
+      0,
+      1,
+      1
+    ]
   },
+  "keywordTotals": [
+    {
+      "label": "Prompt attack (direct)",
+      "category": "Agentic & LLM Attacks",
+      "total": 90
+    },
+    {
+      "label": "Episodic and semantic memory architectures",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 59
+    },
+    {
+      "label": "Agent orchestration frameworks",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 55
+    },
+    {
+      "label": "Agent-to-Agent (A2A) communication",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 28
+    },
+    {
+      "label": "Model Context Protocol (MCP)",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 26
+    },
+    {
+      "label": "Tool-use and function calling",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 20
+    },
+    {
+      "label": "Autonomous agent instruments",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 19
+    },
+    {
+      "label": "Multi-Agent Systems (MAS)",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 16
+    },
+    {
+      "label": "Continuous AI monitoring and observability",
+      "category": "Governance, Risk & Frameworks",
+      "total": 8
+    },
+    {
+      "label": "Agentic workflows",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 7
+    },
+    {
+      "label": "Agentic RAG and GraphRAG",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 5
+    },
+    {
+      "label": "Self-evolving AI agents",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 4
+    },
+    {
+      "label": "OWASP Top 10 for LLM Applications",
+      "category": "Governance, Risk & Frameworks",
+      "total": 4
+    },
+    {
+      "label": "Indirect prompt attack",
+      "category": "Agentic & LLM Attacks",
+      "total": 3
+    },
+    {
+      "label": "Tool poisoning and tool shadowing",
+      "category": "Agentic & LLM Attacks",
+      "total": 2
+    },
+    {
+      "label": "Dynamic guardrails",
+      "category": "Defenses & Security Engineering",
+      "total": 2
+    },
+    {
+      "label": "Sandboxing for agent execution isolation",
+      "category": "Defenses & Security Engineering",
+      "total": 2
+    },
+    {
+      "label": "Agentic red teaming",
+      "category": "Defenses & Security Engineering",
+      "total": 2
+    },
+    {
+      "label": "MITRE ATLAS",
+      "category": "Governance, Risk & Frameworks",
+      "total": 2
+    },
+    {
+      "label": "Agent hijacking",
+      "category": "Agentic & LLM Attacks",
+      "total": 1
+    },
+    {
+      "label": "Goal hijacking",
+      "category": "Agentic & LLM Attacks",
+      "total": 1
+    },
+    {
+      "label": "AI supply chain attacks (including compromised MCP servers)",
+      "category": "Agentic & LLM Attacks",
+      "total": 1
+    },
+    {
+      "label": "AI Gateway and LLM firewall",
+      "category": "Defenses & Security Engineering",
+      "total": 1
+    },
+    {
+      "label": "Zero Trust for AI agents",
+      "category": "Defenses & Security Engineering",
+      "total": 1
+    },
+    {
+      "label": "Rogue tool execution",
+      "category": "Agentic & LLM Attacks",
+      "total": 0
+    },
+    {
+      "label": "Cross-agent prompt attack",
+      "category": "Agentic & LLM Attacks",
+      "total": 0
+    },
+    {
+      "label": "Denial of Wallet (DoW) and infinite loop attacks",
+      "category": "Agentic & LLM Attacks",
+      "total": 0
+    },
+    {
+      "label": "Data exfiltration via tool abuse",
+      "category": "Agentic & LLM Attacks",
+      "total": 0
+    },
+    {
+      "label": "Privilege escalation in agent environments",
+      "category": "Agentic & LLM Attacks",
+      "total": 0
+    },
+    {
+      "label": "Context window overflow",
+      "category": "Agentic & LLM Attacks",
+      "total": 0
+    },
+    {
+      "label": "Least privilege access for tool execution",
+      "category": "Defenses & Security Engineering",
+      "total": 0
+    },
+    {
+      "label": "Human-in-the-loop (HITL) authorization",
+      "category": "Defenses & Security Engineering",
+      "total": 0
+    },
+    {
+      "label": "Trajectory anomaly detection",
+      "category": "Defenses & Security Engineering",
+      "total": 0
+    },
+    {
+      "label": "AI Security Posture Management (AI-SPM)",
+      "category": "Defenses & Security Engineering",
+      "total": 0
+    },
+    {
+      "label": "Confidential information masking (PII/PCI filtering)",
+      "category": "Defenses & Security Engineering",
+      "total": 0
+    },
+    {
+      "label": "Output sanitization and validation",
+      "category": "Defenses & Security Engineering",
+      "total": 0
+    },
+    {
+      "label": "AI Risk Management Framework (AI RMF)",
+      "category": "Governance, Risk & Frameworks",
+      "total": 0
+    },
+    {
+      "label": "Model cards and system cards",
+      "category": "Governance, Risk & Frameworks",
+      "total": 0
+    },
+    {
+      "label": "Data lineage and provenance",
+      "category": "Governance, Risk & Frameworks",
+      "total": 0
+    }
+  ],
   "topDocs": [
     {
       "title": "State of Agent Security — Q2 2026 (Version 2.0)",
       "publisher": "AgentGraph",
-      "why": "Квартальный срез по уязвимостям и рискам инфраструктуры AI-агентов (экосистема навыков, реестры, supply-chain).",
+      "why": "Quarterly snapshot of vulnerabilities and infrastructure risks around AI agents, agent registries, and supply-chain surfaces.",
       "date": "2026-05-12",
       "url": "https://agentgraph.co/state-of-agent-security-2026-v1.pdf"
     },
     {
       "title": "Project Glasswing: An initial update",
       "publisher": "Anthropic",
-      "why": "Свежий отчёт о практиках киберзащиты на фоне роста возможностей моделей: масштабирование поиска уязвимостей, процесс CVD, bottleneck triage/patching.",
+      "why": "Fresh field report on AI-assisted cyber defense, vulnerability discovery at scale, coordinated disclosure, triage, and patching bottlenecks.",
       "date": "2026-05-22",
       "url": "https://www.anthropic.com/research/glasswing-initial-update"
     },
     {
       "title": "Strengthening our Frontier Safety Framework (FSF 3.1 update)",
       "publisher": "Google DeepMind",
-      "why": "Обновление framework’а по управлению рисками frontier-моделей: расширение доменов рисков и протоколов safety/security, актуально для агентных систем.",
+      "why": "Q2 update to a frontier model risk framework, including expanded domains and tracked capability levels relevant to agentic systems.",
       "date": "2026-04-17",
       "url": "https://deepmind.google/blog/strengthening-our-frontier-safety-framework/"
     },
     {
       "title": "AI Inference Servers Are the New Internet Edge (LMDeploy SSRF case study)",
       "publisher": "Cloud Security Alliance (CSA)",
-      "why": "Q2 2026 разбор эксплойта/паттернов уязвимостей в inference‑серверах (SSRF, unsafe deserialization, default auth) и практические рекомендации по ремедиации.",
+      "why": "Q2 2026 analysis of inference-server exposure patterns, including SSRF, unsafe deserialization, default-auth problems, and remediation guidance.",
       "date": "2026-04-26",
       "url": "https://labs.cloudsecurityalliance.org/wp-content/uploads/2026/04/CSA_research_note_lmdeploy_inference_server_ssrf_20260426-csa-styled.pdf"
     },
     {
       "title": "Frontier AI Trends Report",
       "publisher": "UK AI Security Institute (AISI)",
-      "why": "Публичный обзор наблюдаемых трендов в frontier‑оценках и сопутствующих safeguards; удобный “квартальный контекст” для governance и risk tracking.",
+      "why": "Public trend report on frontier AI evaluations and safeguards, useful as quarterly context for governance and risk tracking.",
       "date": "2026-04-01",
       "url": "https://www.aisi.gov.uk/frontier-ai-trends-report"
     }
   ],
   "topSources": [
-    { "name": "OpenAI Research", "count": 42, "url": "https://openai.com/research" },
-    { "name": "Anthropic Research", "count": 37, "url": "https://www.anthropic.com/research" },
-    { "name": "Microsoft Security Blog", "count": 24, "url": "https://www.microsoft.com/en-us/security/blog/" },
-    { "name": "Trail of Bits", "count": 18, "url": "https://blog.trailofbits.com/" },
-    { "name": "arXiv (cs.CR/cs.AI)", "count": 15, "url": "https://arxiv.org/list/cs.CR/recent" }
+    {
+      "name": "github.com",
+      "count": 110,
+      "url": "https://github.com"
+    },
+    {
+      "name": "arxiv.org",
+      "count": 6,
+      "url": "https://arxiv.org"
+    },
+    {
+      "name": "typia.io",
+      "count": 4,
+      "url": "https://typia.io"
+    },
+    {
+      "name": "npmjs.com",
+      "count": 3,
+      "url": "https://npmjs.com"
+    },
+    {
+      "name": "machinelearningmastery.com",
+      "count": 3,
+      "url": "https://machinelearningmastery.com"
+    }
   ]
 }
-

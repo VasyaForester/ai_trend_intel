@@ -1,0 +1,65 @@
+{
+  "description": "AI Security keyword taxonomy for trend tracking. `label` is shown in UI; `query` is the search phrase used by collectors (Hacker News Algolia API, etc.). Not exhaustive — extend over time.",
+  "version": "2026-06-03",
+  "categories": [
+    {
+      "name": "SOTA Technologies & New Agent Architectures",
+      "keywords": [
+        { "label": "Model Context Protocol (MCP)", "query": "Model Context Protocol" },
+        { "label": "Self-evolving AI agents", "query": "self-evolving agent" },
+        { "label": "Multi-Agent Systems (MAS)", "query": "multi-agent system" },
+        { "label": "Agent-to-Agent (A2A) communication", "query": "agent-to-agent" },
+        { "label": "Agentic RAG and GraphRAG", "query": "agentic RAG" },
+        { "label": "Agent orchestration frameworks", "query": "agent orchestration" },
+        { "label": "Tool-use and function calling", "query": "function calling" },
+        { "label": "Episodic and semantic memory architectures", "query": "agent memory" },
+        { "label": "Agentic workflows", "query": "agentic workflow" },
+        { "label": "Autonomous agent instruments", "query": "autonomous agent" }
+      ]
+    },
+    {
+      "name": "Agentic & LLM Attacks",
+      "keywords": [
+        { "label": "Prompt attack (direct)", "query": "prompt injection" },
+        { "label": "Indirect prompt attack", "query": "indirect prompt injection" },
+        { "label": "Agent hijacking", "query": "agent hijacking" },
+        { "label": "Tool poisoning and tool shadowing", "query": "tool poisoning" },
+        { "label": "Rogue tool execution", "query": "rogue tool" },
+        { "label": "Cross-agent prompt attack", "query": "cross-agent prompt" },
+        { "label": "Goal hijacking", "query": "goal hijacking" },
+        { "label": "Denial of Wallet (DoW) and infinite loop attacks", "query": "denial of wallet" },
+        { "label": "Data exfiltration via tool abuse", "query": "data exfiltration agent" },
+        { "label": "Privilege escalation in agent environments", "query": "privilege escalation agent" },
+        { "label": "AI supply chain attacks (including compromised MCP servers)", "query": "AI supply chain attack" },
+        { "label": "Context window overflow", "query": "context window overflow" }
+      ]
+    },
+    {
+      "name": "Defenses & Security Engineering",
+      "keywords": [
+        { "label": "AI Gateway and LLM firewall", "query": "LLM firewall" },
+        { "label": "Dynamic guardrails", "query": "LLM guardrails" },
+        { "label": "Zero Trust for AI agents", "query": "zero trust AI agent" },
+        { "label": "Least privilege access for tool execution", "query": "least privilege agent" },
+        { "label": "Sandboxing for agent execution isolation", "query": "agent sandboxing" },
+        { "label": "Human-in-the-loop (HITL) authorization", "query": "human in the loop agent" },
+        { "label": "Trajectory anomaly detection", "query": "agent anomaly detection" },
+        { "label": "Agentic red teaming", "query": "AI red teaming" },
+        { "label": "AI Security Posture Management (AI-SPM)", "query": "AI security posture management" },
+        { "label": "Confidential information masking (PII/PCI filtering)", "query": "PII redaction LLM" },
+        { "label": "Output sanitization and validation", "query": "LLM output validation" }
+      ]
+    },
+    {
+      "name": "Governance, Risk & Frameworks",
+      "keywords": [
+        { "label": "MITRE ATLAS", "query": "MITRE ATLAS" },
+        { "label": "OWASP Top 10 for LLM Applications", "query": "OWASP LLM" },
+        { "label": "AI Risk Management Framework (AI RMF)", "query": "AI Risk Management Framework" },
+        { "label": "Model cards and system cards", "query": "model card system card" },
+        { "label": "Data lineage and provenance", "query": "data provenance AI" },
+        { "label": "Continuous AI monitoring and observability", "query": "LLM observability" }
+      ]
+    }
+  ]
+}

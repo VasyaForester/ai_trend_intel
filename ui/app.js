@@ -36,23 +36,11 @@ const weekLabels = Array.from({ length: 12 }, (_, i) => {
   return formatWeekLabel(d);
 });
 
-// Demo data (fallback). Primary path is loading `ui/data.json`.
+// Primary path is loading real data from `ui/data.json`.
 const fallbackData = {
-  meta: { generatedAt: null, windowWeeks: 12, note: "Demo fallback data." },
-  keywords: [
-    { key: "prompt injection", color: "#22d3ee" },
-    { key: "mcp", color: "#a855f7" },
-    { key: "ai agent", color: "#60a5fa" },
-    { key: "self-evolving agent", color: "#f59e0b" },
-    { key: "secure rag", color: "#34d399" },
-  ],
-  seriesByKeyword: {
-    "prompt injection": [22, 19, 25, 21, 28, 24, 31, 27, 33, 29, 35, 32],
-    mcp: [5, 8, 6, 11, 9, 14, 12, 16, 13, 18, 15, 20],
-    "ai agent": [14, 12, 16, 13, 18, 15, 21, 19, 23, 20, 26, 24],
-    "self-evolving agent": [3, 2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 7],
-    "secure rag": [9, 8, 10, 9, 11, 10, 12, 11, 13, 12, 14, 13]
-  },
+  meta: { generatedAt: null, windowWeeks: 12, note: "No data loaded. Generate ui/data.json with scripts/collect_hn.py." },
+  keywords: [],
+  seriesByKeyword: {},
   topDocs: [],
   topSources: []
 };
@@ -132,7 +120,7 @@ function renderForecast(keywords, seriesByKeyword) {
     `политики для RAG/контекста, мониторинг инцидентов и тестирование защитных мер на собственных сценариях.`;
 }
 
-function renderChart(keywords, seriesByKeyword) {
+function renderChart(keywords, seriesByKeyword, labels = weekLabels) {
   const ctx = document.getElementById("mentionsChart");
   const datasets = keywords.map((k) => ({
     label: k.key,
@@ -148,7 +136,7 @@ function renderChart(keywords, seriesByKeyword) {
   // eslint-disable-next-line no-new
   new Chart(ctx, {
     type: "line",
-    data: { labels: weekLabels, datasets },
+    data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -217,7 +205,7 @@ function escapeHtml(str) {
 
 loadData().then((data) => {
   renderMeta(data.meta);
-  renderChart(data.keywords, data.seriesByKeyword);
+  renderChart(data.keywords, data.seriesByKeyword, data.weekLabels || weekLabels);
   renderTopDocs(data.topDocs);
   renderTopSources(data.topSources);
   renderForecast(data.keywords, data.seriesByKeyword);

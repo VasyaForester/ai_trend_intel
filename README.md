@@ -37,9 +37,15 @@ After you add the implementation code, typical steps will be:
 2. Configure source lists and any optional API keys
 3. Run ingestion + analysis pipeline commands
 
-## UI (demo)
+## UI
 
-The repository includes a lightweight browser UI in `ui/` (no build step).
+The repository includes a lightweight browser UI in `ui/` (no build step). The dashboard reads real trend data from `ui/data.json`.
+
+Regenerate data from Hacker News Algolia API (real non-cumulative weekly counts):
+
+```powershell
+python scripts/collect_hn.py
+```
 
 Run a local server from the repo root:
 
