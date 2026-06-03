@@ -77,6 +77,23 @@ def format_week_label(dt: datetime) -> str:
     return dt.strftime("%d.%m")
 
 
+def avg(values: list[int]) -> float:
+    return sum(values) / len(values) if values else 0.0
+
+
+def growth_score(series: list[int]) -> float:
+    if len(series) < 2:
+        return 0.0
+    midpoint = max(1, len(series) // 2)
+    early = avg(series[:midpoint])
+    late = avg(series[midpoint:])
+    absolute_growth = late - early
+    if absolute_growth <= 0:
+        return 0.0
+    import math
+    return math.log1p(absolute_growth) * math.log1p(late / max(1.0, early))
+
+
 def host_of(url: str | None) -> str | None:
     if not url:
         return None
@@ -209,9 +226,8 @@ def main(argv: list[str] | None = None) -> int:
     totals.sort(key=lambda item: item["total"], reverse=True)
     top5 = totals[:5]
 
-    series_by_keyword: dict[str, list[int]] = {}
-    chart_keywords = []
-    for idx, kw in enumerate(top5):
+    all_series_by_keyword: dict[str, list[int]] = {}
+    for idx, kw in enumerate(totals):
         weekly = []
         for ws, we in windows:
             q = date_query(kw["query"], ws, we)
@@ -219,9 +235,28 @@ def main(argv: list[str] | None = None) -> int:
             weekly.append(result_count(data))
             collect_source_hits(organic_results(data), registry, source_counts)
             time.sleep(args.delay_seconds)
-        series_by_keyword[kw["label"]] = weekly
-        chart_keywords.append({"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]})
+        all_series_by_keyword[kw["label"]] = weekly
         print(f"  weekly {kw['label']}: {weekly}")
+
+    series_by_keyword = {kw["label"]: all_series_by_keyword[kw["label"]] for kw in top5}
+    chart_keywords = [
+        {"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]}
+        for idx, kw in enumerate(top5)
+    ]
+
+    growth_top5 = sorted(
+        (
+            {**kw, "growthScore": growth_score(all_series_by_keyword.get(kw["label"], []))}
+            for kw in totals
+        ),
+        key=lambda x: (x["growthScore"], x["total"]),
+        reverse=True,
+    )[:5]
+    growth_series_by_keyword = {kw["label"]: all_series_by_keyword[kw["label"]] for kw in growth_top5}
+    growth_keywords = [
+        {"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]}
+        for idx, kw in enumerate(growth_top5)
+    ]
 
     top_sources = []
     for host, count in sorted(source_counts.items(), key=lambda kv: kv[1], reverse=True)[:5]:
@@ -239,6 +274,8 @@ def main(argv: list[str] | None = None) -> int:
         "weekLabels": [format_week_label(ws) for ws, _ in windows],
         "keywords": chart_keywords,
         "seriesByKeyword": series_by_keyword,
+        "growthKeywords": growth_keywords,
+        "growthSeriesByKeyword": growth_series_by_keyword,
         "keywordTotals": [
             {"label": item["label"], "category": item["category"], "total": item["total"]} for item in totals
         ],

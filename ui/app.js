@@ -29,6 +29,40 @@ function linearTrendScore(series) {
   return (n * sumXY - sumX * sumY) / denom;
 }
 
+function growthTrendScore(series) {
+  if (!Array.isArray(series) || series.length < 2) return 0;
+  const midpoint = Math.max(1, Math.floor(series.length / 2));
+  const early = average(series.slice(0, midpoint));
+  const late = average(series.slice(midpoint));
+  const absoluteGrowth = late - early;
+  if (absoluteGrowth <= 0) return 0;
+  // log1p rewards low-base acceleration without letting huge baselines dominate.
+  return Math.log1p(absoluteGrowth) * Math.log1p(late / Math.max(1, early));
+}
+
+function average(values) {
+  if (!values.length) return 0;
+  return values.reduce((sum, value) => sum + Number(value || 0), 0) / values.length;
+}
+
+function growthSelectionFrom(seriesByKeyword, limit = 5) {
+  return Object.entries(seriesByKeyword || {})
+    .map(([key, series]) => ({ key, score: growthTrendScore(series), total: sum(series) }))
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score || b.total - a.total)
+    .slice(0, limit)
+    .map((item, index) => ({ key: item.key, color: chartColor(index) }));
+}
+
+function sum(values) {
+  return (values || []).reduce((total, value) => total + Number(value || 0), 0);
+}
+
+function chartColor(index) {
+  const colors = ["#22d3ee", "#a855f7", "#60a5fa", "#f59e0b", "#34d399", "#f472b6", "#facc15"];
+  return colors[index % colors.length];
+}
+
 const now = new Date();
 const startWeek = isoWeekStart(new Date(now.getTime() - 11 * 7 * 24 * 3600 * 1000));
 const weekLabels = Array.from({ length: 12 }, (_, i) => {
@@ -168,8 +202,8 @@ function renderForecast(keywords, seriesByKeyword) {
     `политики для RAG/контекста, мониторинг инцидентов и тестирование защитных мер на собственных сценариях.`;
 }
 
-function renderChart(keywords, seriesByKeyword, labels = weekLabels) {
-  const ctx = document.getElementById("mentionsChart");
+function renderLineChart(canvasId, keywords, seriesByKeyword, labels = weekLabels) {
+  const ctx = document.getElementById(canvasId);
   const datasets = keywords.map((k) => ({
     label: k.key,
     data: seriesByKeyword[k.key] || Array(12).fill(0),
@@ -224,6 +258,17 @@ function renderChart(keywords, seriesByKeyword, labels = weekLabels) {
   });
 }
 
+function renderDashboardCharts(data) {
+  const labels = data.weekLabels || weekLabels;
+  const volumeKeywords = data.keywords || [];
+  const volumeSeries = data.seriesByKeyword || {};
+  const growthSeries = data.growthSeriesByKeyword || volumeSeries;
+  const growthKeywords = data.growthKeywords || growthSelectionFrom(growthSeries);
+
+  renderLineChart("mentionsChart", volumeKeywords, volumeSeries, labels);
+  renderLineChart("growthChart", growthKeywords, growthSeries, labels);
+}
+
 function renderMeta(meta) {
   const el = document.getElementById("lastUpdated");
   const d = meta?.generatedAt ? new Date(meta.generatedAt) : new Date();
@@ -253,7 +298,7 @@ function escapeHtml(str) {
 
 loadData().then((data) => {
   renderMeta(data.meta);
-  renderChart(data.keywords, data.seriesByKeyword, data.weekLabels || weekLabels);
+  renderDashboardCharts(data);
   renderTopDocs(data.topDocs);
   renderTopSources(data.topSources);
   renderForecast(data.keywords, data.seriesByKeyword);

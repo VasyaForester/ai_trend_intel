@@ -104,6 +104,24 @@ def format_week_label(dt: datetime) -> str:
     return dt.strftime("%d.%m")
 
 
+def avg(values: list[int]) -> float:
+    return sum(values) / len(values) if values else 0.0
+
+
+def growth_score(series: list[int]) -> float:
+    if len(series) < 2:
+        return 0.0
+    midpoint = max(1, len(series) // 2)
+    early = avg(series[:midpoint])
+    late = avg(series[midpoint:])
+    absolute_growth = late - early
+    if absolute_growth <= 0:
+        return 0.0
+    # Low-base acceleration should rank above tiny relative movement on huge baselines.
+    import math
+    return math.log1p(absolute_growth) * math.log1p(late / max(1.0, early))
+
+
 def host_of_source(url: str) -> str:
     parsed = urlparse(url)
     host = (parsed.netloc or parsed.path).lower()
@@ -166,18 +184,37 @@ def main() -> int:
     totals.sort(key=lambda x: x["total"], reverse=True)
     top5 = totals[:5]
 
-    # Pass 2: weekly counts (non-cumulative) for the top-5 keywords.
-    series_by_keyword: dict[str, list[int]] = {}
-    chart_keywords = []
-    for idx, kw in enumerate(top5):
+    # Pass 2: weekly counts (non-cumulative) for all keywords so volume and
+    # growth dashboards can be ranked independently.
+    all_series_by_keyword: dict[str, list[int]] = {}
+    for kw in totals:
         weekly = []
         for (ws, we) in windows:
             data = hn_search(kw["query"], int(ws.timestamp()), int(we.timestamp()), hits_per_page=0)
             weekly.append(int(data.get("nbHits", 0)))
             time.sleep(0.15)
-        series_by_keyword[kw["label"]] = weekly
-        chart_keywords.append({"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]})
+        all_series_by_keyword[kw["label"]] = weekly
         print(f"  weekly {kw['label']}: {weekly}")
+
+    series_by_keyword = {kw["label"]: all_series_by_keyword[kw["label"]] for kw in top5}
+    chart_keywords = [
+        {"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]}
+        for idx, kw in enumerate(top5)
+    ]
+
+    growth_top5 = sorted(
+        (
+            {**kw, "growthScore": growth_score(all_series_by_keyword.get(kw["label"], []))}
+            for kw in totals
+        ),
+        key=lambda x: (x["growthScore"], x["total"]),
+        reverse=True,
+    )[:5]
+    growth_series_by_keyword = {kw["label"]: all_series_by_keyword[kw["label"]] for kw in growth_top5}
+    growth_keywords = [
+        {"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]}
+        for idx, kw in enumerate(growth_top5)
+    ]
 
     # Top documents are curated and link-checked separately; do not derive them
     # from HN popularity because that can surface irrelevant posts.
@@ -212,6 +249,8 @@ def main() -> int:
         "weekLabels": [format_week_label(ws) for ws, _ in windows],
         "keywords": chart_keywords,
         "seriesByKeyword": series_by_keyword,
+        "growthKeywords": growth_keywords,
+        "growthSeriesByKeyword": growth_series_by_keyword,
         "keywordTotals": [
             {"label": t["label"], "category": t["category"], "total": t["total"]} for t in totals
         ],

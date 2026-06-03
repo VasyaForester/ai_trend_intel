@@ -22,16 +22,29 @@
       </header>
 
       <main class="grid">
-        <section class="card card--span2">
+        <section class="card">
           <div class="card__head">
-            <h2 class="card__title">Динамика упоминаний (топ‑5 фраз)</h2>
+            <h2 class="card__title">Топ‑5 по популярности</h2>
             <div class="card__hint">Число сообщений за неделю (не накопительно), 12 недель</div>
           </div>
           <div class="chartWrap">
-            <canvas id="mentionsChart" aria-label="График упоминаний" role="img"></canvas>
+            <canvas id="mentionsChart" aria-label="График популярных упоминаний" role="img"></canvas>
           </div>
           <div class="legendHint">
-            Каждая точка — количество сообщений за конкретную неделю, без суммирования с прошлыми.
+            Самые популярные фразы по суммарному числу сообщений.
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card__head">
+            <h2 class="card__title">Топ‑5 по динамике роста</h2>
+            <div class="card__hint">Рост важнее абсолютного масштаба</div>
+          </div>
+          <div class="chartWrap">
+            <canvas id="growthChart" aria-label="График растущих упоминаний" role="img"></canvas>
+          </div>
+          <div class="legendHint">
+            Рейтинг учитывает относительный рост: 1→48 сильнее, чем 22876→24071.
           </div>
         </section>
 
