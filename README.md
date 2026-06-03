@@ -37,6 +37,8 @@ After you add the implementation code, typical steps will be:
 2. Configure source lists and any optional API keys
 3. Run ingestion + analysis pipeline commands
 
+The source registry lives in `config/search_sources.json`. Restricted sources (for example LinkedIn, Slack, and social APIs that require authorization) are listed there but should only be used by collectors after manual access/configuration.
+
 ## UI
 
 The repository includes a lightweight browser UI in `ui/` (no build step). The dashboard reads real trend data from `ui/data.json`.
@@ -46,6 +48,29 @@ Regenerate data from Hacker News Algolia API (real non-cumulative weekly counts)
 ```powershell
 python scripts/collect_hn.py
 ```
+
+Collect arXiv links once (no API key required):
+
+```powershell
+python scripts/collect_arxiv.py
+```
+
+Keep searching arXiv every 10 minutes and accumulating links:
+
+```powershell
+$env:ARXIV_USER_AGENT = "ai-trend-intel/1.0 (research; contact: your-email@example.com)"
+python scripts/collect_arxiv.py --watch --interval-minutes 10
+```
+
+Or use the Windows helper:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/start_arxiv_watcher.ps1 -ContactEmail "your-email@example.com"
+```
+
+arXiv limits clients to one request every 3 seconds and one connection at a time. The collector follows this by default and writes accumulated links to `data/arxiv_links.json` and `ui/arxiv_links.json`.
+
+Thank you to arXiv for use of its open access interoperability.
 
 Run a local server from the repo root:
 

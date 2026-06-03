@@ -56,6 +56,16 @@ async function loadData() {
   }
 }
 
+async function loadArxivLinks() {
+  try {
+    const res = await fetch("./arxiv_links.json", { cache: "no-store" });
+    if (!res.ok) return { meta: {}, papers: [] };
+    return await res.json();
+  } catch {
+    return { meta: {}, papers: [] };
+  }
+}
+
 function renderTopDocs(topDocs) {
   const el = document.getElementById("topDocs");
   el.innerHTML = "";
@@ -79,6 +89,43 @@ function renderTopDocs(topDocs) {
       <div class="docMeta">${escapeHtml(d.why)}</div>
     `;
     el.appendChild(li);
+  });
+}
+
+function renderArxivLinks(arxivData) {
+  const metaEl = document.getElementById("arxivMeta");
+  const listEl = document.getElementById("arxivPapers");
+  const papers = Array.isArray(arxivData?.papers) ? arxivData.papers : [];
+  const meta = arxivData?.meta || {};
+
+  const total = Number(meta.totalPapers || papers.length || 0);
+  const generated = meta.generatedAt ? ` · обновлено ${formatDocDate(String(meta.generatedAt).slice(0, 10))}` : "";
+  metaEl.textContent = `${total} ссылок накоплено${generated}`;
+
+  listEl.innerHTML = "";
+  if (papers.length === 0) {
+    const li = document.createElement("li");
+    li.innerHTML = `<div class="docMeta">Пока нет arXiv-ссылок. Запусти <code>python scripts/collect_arxiv.py</code> или watcher.</div>`;
+    listEl.appendChild(li);
+    return;
+  }
+
+  papers.slice(0, 10).forEach((paper) => {
+    const li = document.createElement("li");
+    const dateText = formatDocDate(paper.published || paper.updated);
+    const categories = Array.isArray(paper.categories) ? paper.categories.join(", ") : "";
+    const matched = Array.isArray(paper.matchedKeywords) ? paper.matchedKeywords.join(", ") : "";
+    li.innerHTML = `
+      <div class="docTitle">${escapeHtml(paper.title || "Untitled arXiv paper")}</div>
+      <div class="docMeta">
+        ${dateText ? `<span>${escapeHtml(dateText)}</span><span> · </span>` : ""}
+        ${categories ? `<span>${escapeHtml(categories)}</span><span> · </span>` : ""}
+        <a class="docLink" href="${paper.url}" target="_blank" rel="noreferrer">arXiv</a>
+        ${paper.pdfUrl ? `<span> · </span><a class="docLink" href="${paper.pdfUrl}" target="_blank" rel="noreferrer">PDF</a>` : ""}
+      </div>
+      ${matched ? `<div class="docMeta">Ключевые слова: ${escapeHtml(matched)}</div>` : ""}
+    `;
+    listEl.appendChild(li);
   });
 }
 
@@ -210,4 +257,6 @@ loadData().then((data) => {
   renderTopSources(data.topSources);
   renderForecast(data.keywords, data.seriesByKeyword);
 });
+
+loadArxivLinks().then(renderArxivLinks);
 

@@ -59,8 +59,16 @@
           <p id="forecast" class="forecast"></p>
           <div class="divider"></div>
           <div class="note">
-            Примечание: это демо‑UI. Позже заменим sample‑данные на результаты твоего пайплайна (ingest → normalize → analyze).
+            Примечание: недельные значения берутся из `ui/data.json`, который генерируется сборщиками данных.
           </div>
+        </section>
+
+        <section class="card card--span2">
+          <div class="card__head">
+            <h2 class="card__title">Накопленные arXiv-ссылки</h2>
+            <div id="arxivMeta" class="card__hint">Загрузка...</div>
+          </div>
+          <ol id="arxivPapers" class="list list--docs"></ol>
         </section>
       </main>
 

@@ -1,0 +1,11 @@
+{
+  "meta": {
+    "source": "arXiv API",
+    "generatedAt": null,
+    "totalPapers": 0,
+    "lastRunNewPapers": 0,
+    "lastRunErrors": [],
+    "note": "Accumulated arXiv links collected by scripts/collect_arxiv.py."
+  },
+  "papers": []
+}
