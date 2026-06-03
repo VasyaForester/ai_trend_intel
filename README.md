@@ -43,7 +43,20 @@ The source registry lives in `config/search_sources.json`. Restricted sources (f
 
 The repository includes a lightweight browser UI in `ui/` (no build step). The dashboard reads real trend data from `ui/data.json`.
 
-Regenerate data from Hacker News Algolia API (real non-cumulative weekly counts):
+Regenerate data from SerpAPI web search (primary collector):
+
+```powershell
+Copy-Item .env.example .env
+powershell -ExecutionPolicy Bypass -File scripts/setup_serpapi_key.ps1
+```
+
+After `.env` is configured, run:
+
+```powershell
+python scripts/collect_serpapi.py --engine google
+```
+
+Hacker News collection remains available as a narrow fallback:
 
 ```powershell
 python scripts/collect_hn.py

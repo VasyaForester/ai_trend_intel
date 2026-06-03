@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-06-03T10:57:10Z",
+    "generatedAt": "2026-06-03T11:58:30Z",
     "windowWeeks": 12,
     "mentionsMetric": "weekly_count",
     "source": "Hacker News (Algolia Search API)",
@@ -350,38 +350,38 @@
   ],
   "topSources": [
     {
-      "name": "cyata.ai",
-      "count": 0,
-      "url": "https://cyata.ai/",
-      "category": "startups_and_companies",
+      "name": "github.com",
+      "count": 110,
+      "url": "https://github.com/advisories?query=llm",
+      "category": "research_databases_and_other_sources",
       "access": "public"
     },
     {
-      "name": "knostic.ai",
-      "count": 0,
-      "url": "https://knostic.ai/",
-      "category": "startups_and_companies",
+      "name": "huggingface.co",
+      "count": 3,
+      "url": "https://huggingface.co/datasets/DeepNLP/security-ai-agent",
+      "category": "research_databases_and_other_sources",
       "access": "public"
     },
     {
-      "name": "preamble.com",
-      "count": 0,
-      "url": "https://preamble.com/",
-      "category": "startups_and_companies",
+      "name": "medium.com",
+      "count": 2,
+      "url": "https://medium.com/",
+      "category": "media",
       "access": "public"
     },
     {
-      "name": "dynamo.ai",
-      "count": 0,
-      "url": "https://www.dynamo.ai/",
-      "category": "startups_and_companies",
+      "name": "openai.com",
+      "count": 2,
+      "url": "https://openai.com/news/",
+      "category": "blogs_and_corporate_resources",
       "access": "public"
     },
     {
-      "name": "straiker.ai",
-      "count": 0,
-      "url": "https://www.straiker.ai/",
-      "category": "startups_and_companies",
+      "name": "substack.com",
+      "count": 1,
+      "url": "https://substack.com/@opensourcesecurity",
+      "category": "blogs_and_corporate_resources",
       "access": "public"
     }
   ],

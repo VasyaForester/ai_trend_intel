@@ -140,13 +140,11 @@ function renderTopSources(topSources) {
   }
   topSources.forEach((s) => {
     const li = document.createElement("li");
-    const detail = s.category
-      ? `${s.category}${s.access ? ` · ${s.access}` : ""}`
-      : `${s.count} новостей`;
+    const count = Number(s.count || 0);
     li.innerHTML = `
       <div class="sourceRow">
         <a class="sourceName docLink" href="${s.url}" target="_blank" rel="noreferrer">${escapeHtml(s.name)}</a>
-        <div class="sourceCount">${escapeHtml(detail)}</div>
+        <div class="sourceCount">${count} сообщений</div>
       </div>
     `;
     el.appendChild(li);

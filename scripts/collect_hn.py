@@ -110,23 +110,26 @@ def host_of_source(url: str) -> str:
     return host[4:] if host.startswith("www.") else host
 
 
-def load_configured_top_sources(limit: int = 5) -> list[dict[str, object]]:
+def load_configured_source_map() -> dict[str, dict[str, object]]:
     if not SEARCH_SOURCES_PATH.exists():
-        return []
+        return {}
     registry = json.loads(SEARCH_SOURCES_PATH.read_text(encoding="utf-8"))
-    sources = []
+    sources: dict[str, dict[str, object]] = {}
     for category in registry.get("categories", []):
         if category.get("access") == "restricted":
             continue
         for url in category.get("sources", []):
-            sources.append({
-                "name": host_of_source(url),
+            host = host_of_source(url)
+            if host in sources:
+                continue
+            sources[host] = {
+                "name": host,
                 "count": 0,
                 "url": url,
                 "category": category.get("id", "unknown"),
                 "access": category.get("access", "public"),
-            })
-    return sources[:limit]
+            }
+    return sources
 
 
 def main() -> int:
@@ -180,11 +183,8 @@ def main() -> int:
     # from HN popularity because that can surface irrelevant posts.
     top_docs = key_documents.get("documents", [])[:5]
 
-    # Top source registry: explicitly configured sources for future collectors.
-    # HN domain counts are still kept as provenance in `observedSources`.
-    top_sources_out = load_configured_top_sources()
-
     # Observed sources: most frequent story domains among matched HN stories.
+    configured_sources = load_configured_source_map()
     source_counts: dict[str, int] = {}
     for h in collected_hits.values():
         host = host_of(h.get("url"))
@@ -194,6 +194,12 @@ def main() -> int:
     observed_sources_out = [
         {"name": name, "count": cnt, "url": f"https://{name}"} for name, cnt in observed_sources
     ]
+    top_sources = [
+        {**configured_sources[name], "count": cnt}
+        for name, cnt in sorted(source_counts.items(), key=lambda kv: kv[1], reverse=True)
+        if name in configured_sources
+    ]
+    top_sources_out = top_sources[:5]
 
     out = {
         "meta": {
