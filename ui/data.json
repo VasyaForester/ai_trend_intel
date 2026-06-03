@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-06-03T12:31:15Z",
+    "generatedAt": "2026-06-03T12:46:16Z",
     "windowWeeks": 12,
     "mentionsMetric": "weekly_count",
     "source": "Hacker News (Algolia Search API)",
@@ -114,6 +114,11 @@
       1
     ]
   },
+  "growthLabels": [
+    "Начало",
+    "Середина",
+    "Конец"
+  ],
   "growthKeywords": [
     {
       "key": "Self-evolving AI agents",
@@ -122,90 +127,18 @@
     {
       "key": "Agentic RAG and GraphRAG",
       "color": "#a855f7"
-    },
-    {
-      "key": "Continuous AI monitoring and observability",
-      "color": "#60a5fa"
-    },
-    {
-      "key": "AI supply chain attacks (including compromised MCP servers)",
-      "color": "#f59e0b"
-    },
-    {
-      "key": "Prompt attack (direct)",
-      "color": "#34d399"
     }
   ],
   "growthSeriesByKeyword": {
     "Self-evolving AI agents": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      4
+      0.0,
+      0.0,
+      100.0
     ],
     "Agentic RAG and GraphRAG": [
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      1,
-      2,
-      0,
-      0,
-      1
-    ],
-    "Continuous AI monitoring and observability": [
-      2,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      3,
-      2,
-      0,
-      0
-    ],
-    "AI supply chain attacks (including compromised MCP servers)": [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "Prompt attack (direct)": [
-      27,
-      10,
-      9,
-      7,
-      6,
-      6,
-      8,
-      3,
-      3,
-      1,
-      4,
-      6
+      0.0,
+      50.0,
+      75.0
     ]
   },
   "keywordTotals": [

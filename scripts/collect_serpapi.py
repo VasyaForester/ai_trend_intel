@@ -81,17 +81,22 @@ def avg(values: list[int]) -> float:
     return sum(values) / len(values) if values else 0.0
 
 
-def growth_score(series: list[int]) -> float:
-    if len(series) < 2:
-        return 0.0
-    midpoint = max(1, len(series) // 2)
-    early = avg(series[:midpoint])
-    late = avg(series[midpoint:])
-    absolute_growth = late - early
-    if absolute_growth <= 0:
-        return 0.0
-    import math
-    return math.log1p(absolute_growth) * math.log1p(late / max(1.0, early))
+def growth_percent_points(series: list[int]) -> list[float] | None:
+    """Return [start%, mid%, end%] for monotonic growth, or None."""
+    if len(series) < 3:
+        return None
+    chunk = max(1, len(series) // 3)
+    start_value = avg(series[:chunk])
+    mid_value = avg(series[chunk:chunk * 2])
+    end_value = avg(series[chunk * 2:])
+    if mid_value < start_value or end_value < mid_value:
+        return None
+    baseline = max(1.0, start_value)
+    mid_growth = ((mid_value - start_value) / baseline) * 100
+    end_growth = ((end_value - start_value) / baseline) * 100
+    if end_growth <= 0:
+        return None
+    return [0.0, round(mid_growth, 2), round(end_growth, 2)]
 
 
 def host_of(url: str | None) -> str | None:
@@ -244,15 +249,17 @@ def main(argv: list[str] | None = None) -> int:
         for idx, kw in enumerate(top5)
     ]
 
+    growth_candidates = []
+    for kw in totals:
+        points = growth_percent_points(all_series_by_keyword.get(kw["label"], []))
+        if points:
+            growth_candidates.append({**kw, "growthPoints": points, "growthPercent": points[-1]})
     growth_top5 = sorted(
-        (
-            {**kw, "growthScore": growth_score(all_series_by_keyword.get(kw["label"], []))}
-            for kw in totals
-        ),
-        key=lambda x: (x["growthScore"], x["total"]),
+        growth_candidates,
+        key=lambda x: (x["growthPercent"], x["total"]),
         reverse=True,
     )[:5]
-    growth_series_by_keyword = {kw["label"]: all_series_by_keyword[kw["label"]] for kw in growth_top5}
+    growth_series_by_keyword = {kw["label"]: kw["growthPoints"] for kw in growth_top5}
     growth_keywords = [
         {"key": kw["label"], "color": PALETTE[idx % len(PALETTE)]}
         for idx, kw in enumerate(growth_top5)
@@ -274,6 +281,7 @@ def main(argv: list[str] | None = None) -> int:
         "weekLabels": [format_week_label(ws) for ws, _ in windows],
         "keywords": chart_keywords,
         "seriesByKeyword": series_by_keyword,
+        "growthLabels": ["Начало", "Середина", "Конец"],
         "growthKeywords": growth_keywords,
         "growthSeriesByKeyword": growth_series_by_keyword,
         "keywordTotals": [

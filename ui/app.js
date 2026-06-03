@@ -30,14 +30,8 @@ function linearTrendScore(series) {
 }
 
 function growthTrendScore(series) {
-  if (!Array.isArray(series) || series.length < 2) return 0;
-  const midpoint = Math.max(1, Math.floor(series.length / 2));
-  const early = average(series.slice(0, midpoint));
-  const late = average(series.slice(midpoint));
-  const absoluteGrowth = late - early;
-  if (absoluteGrowth <= 0) return 0;
-  // log1p rewards low-base acceleration without letting huge baselines dominate.
-  return Math.log1p(absoluteGrowth) * Math.log1p(late / Math.max(1, early));
+  const points = growthPercentPoints(series);
+  return points ? points[points.length - 1] : 0;
 }
 
 function average(values) {
@@ -52,6 +46,33 @@ function growthSelectionFrom(seriesByKeyword, limit = 5) {
     .sort((a, b) => b.score - a.score || b.total - a.total)
     .slice(0, limit)
     .map((item, index) => ({ key: item.key, color: chartColor(index) }));
+}
+
+function growthPercentPoints(series) {
+  if (!Array.isArray(series) || series.length < 3) return null;
+  const chunk = Math.max(1, Math.floor(series.length / 3));
+  const start = average(series.slice(0, chunk));
+  const mid = average(series.slice(chunk, chunk * 2));
+  const end = average(series.slice(chunk * 2));
+  if (mid < start || end < mid) return null;
+  const baseline = Math.max(1, start);
+  const midGrowth = ((mid - start) / baseline) * 100;
+  const endGrowth = ((end - start) / baseline) * 100;
+  if (endGrowth <= 0) return null;
+  return [0, roundPercent(midGrowth), roundPercent(endGrowth)];
+}
+
+function growthSeriesFrom(seriesByKeyword, keywords) {
+  const out = {};
+  keywords.forEach((keyword) => {
+    const points = growthPercentPoints(seriesByKeyword[keyword.key]);
+    if (points) out[keyword.key] = points;
+  });
+  return out;
+}
+
+function roundPercent(value) {
+  return Math.round(value * 100) / 100;
 }
 
 function sum(values) {
@@ -202,8 +223,10 @@ function renderForecast(keywords, seriesByKeyword) {
     `политики для RAG/контекста, мониторинг инцидентов и тестирование защитных мер на собственных сценариях.`;
 }
 
-function renderLineChart(canvasId, keywords, seriesByKeyword, labels = weekLabels) {
+function renderLineChart(canvasId, keywords, seriesByKeyword, labels = weekLabels, options = {}) {
   const ctx = document.getElementById(canvasId);
+  const valueSuffix = options.valueSuffix || "сообщ. за неделю";
+  const yTitle = options.yTitle || "Сообщений за неделю";
   const datasets = keywords.map((k) => ({
     label: k.key,
     data: seriesByKeyword[k.key] || Array(12).fill(0),
@@ -233,7 +256,7 @@ function renderLineChart(canvasId, keywords, seriesByKeyword, labels = weekLabel
             label: (ctx) => {
               const n = ctx.parsed?.y ?? 0;
               const label = ctx.dataset?.label ?? "";
-              return `${label}: ${n} сообщ. за неделю`;
+              return `${label}: ${n} ${valueSuffix}`;
             },
           },
         },
@@ -247,7 +270,7 @@ function renderLineChart(canvasId, keywords, seriesByKeyword, labels = weekLabel
           beginAtZero: true,
           title: {
             display: true,
-            text: "Сообщений за неделю",
+            text: yTitle,
             color: "rgba(255,255,255,.62)",
           },
           ticks: { color: "rgba(255,255,255,.62)" },
@@ -262,11 +285,16 @@ function renderDashboardCharts(data) {
   const labels = data.weekLabels || weekLabels;
   const volumeKeywords = data.keywords || [];
   const volumeSeries = data.seriesByKeyword || {};
-  const growthSeries = data.growthSeriesByKeyword || volumeSeries;
-  const growthKeywords = data.growthKeywords || growthSelectionFrom(growthSeries);
+  const growthLabels = data.growthLabels || ["Начало", "Середина", "Конец"];
+  const growthBaseSeries = data.growthSeriesByKeyword || volumeSeries;
+  const growthKeywords = data.growthKeywords || growthSelectionFrom(growthBaseSeries);
+  const growthSeries = data.growthSeriesByKeyword || growthSeriesFrom(growthBaseSeries, growthKeywords);
 
   renderLineChart("mentionsChart", volumeKeywords, volumeSeries, labels);
-  renderLineChart("growthChart", growthKeywords, growthSeries, labels);
+  renderLineChart("growthChart", growthKeywords, growthSeries, growthLabels, {
+    valueSuffix: "% прироста",
+    yTitle: "Прирост, %",
+  });
 }
 
 function renderMeta(meta) {
