@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generatedAt": "2026-06-03T10:06:39Z",
+    "generatedAt": "2026-06-03T10:57:10Z",
     "windowWeeks": 12,
     "mentionsMetric": "weekly_count",
     "source": "Hacker News (Algolia Search API)",
@@ -349,6 +349,43 @@
     }
   ],
   "topSources": [
+    {
+      "name": "cyata.ai",
+      "count": 0,
+      "url": "https://cyata.ai/",
+      "category": "startups_and_companies",
+      "access": "public"
+    },
+    {
+      "name": "knostic.ai",
+      "count": 0,
+      "url": "https://knostic.ai/",
+      "category": "startups_and_companies",
+      "access": "public"
+    },
+    {
+      "name": "preamble.com",
+      "count": 0,
+      "url": "https://preamble.com/",
+      "category": "startups_and_companies",
+      "access": "public"
+    },
+    {
+      "name": "dynamo.ai",
+      "count": 0,
+      "url": "https://www.dynamo.ai/",
+      "category": "startups_and_companies",
+      "access": "public"
+    },
+    {
+      "name": "straiker.ai",
+      "count": 0,
+      "url": "https://www.straiker.ai/",
+      "category": "startups_and_companies",
+      "access": "public"
+    }
+  ],
+  "observedSources": [
     {
       "name": "github.com",
       "count": 110,
