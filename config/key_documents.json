@@ -2,6 +2,13 @@
   "description": "Curated Q2 2026 AI security documents with links verified before inclusion. Used by scripts/collect_web.py as ranked topDocs candidates alongside scraped RSS/HTML documents.",
   "documents": [
     {
+      "title": "State of Agentic AI Security and Governance 2.01",
+      "publisher": "OWASP GenAI Security Project",
+      "why": "Large-format GenAI security and governance guide for autonomous AI systems, covering agentic application risks, governance models, frameworks, and safe deployment practices.",
+      "date": "2026-06-01",
+      "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
+    },
+    {
       "title": "State of Agent Security — Q2 2026 (Version 2.0)",
       "publisher": "AgentGraph",
       "why": "Quarterly snapshot of vulnerabilities and infrastructure risks around AI agents, agent registries, and supply-chain surfaces.",

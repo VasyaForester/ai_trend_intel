@@ -14,7 +14,9 @@
         { "label": "Tool-use and function calling", "query": "function calling" },
         { "label": "Episodic and semantic memory architectures", "query": "agent memory" },
         { "label": "Agentic workflows", "query": "agentic workflow" },
-        { "label": "Autonomous agent instruments", "query": "autonomous agent" }
+        { "label": "Autonomous agent instruments", "query": "autonomous agent" },
+        { "label": "Agentic skills", "query": "agentic skills" },
+        { "label": "Agent skills", "query": "agent skills" }
       ]
     },
     {

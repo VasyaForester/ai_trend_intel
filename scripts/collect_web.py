@@ -80,6 +80,45 @@ GENERIC_DASHBOARD_QUERIES = {
     "ai security framework",
     "ai security benchmark",
     "llm security benchmark",
+    "mitre atlas",
+    "owasp llm",
+    "owasp top 10 for llm applications",
+    "owasp top 10 llm",
+    "owasp agentic",
+    "owasp agentic ai",
+    "nist ai rmf",
+    "iso 42001",
+    "ai risk management framework",
+}
+
+TREND_FOCUS_QUERIES = {
+    "self-evolving agent",
+    "model context protocol",
+    "mcp security",
+    "mcp attack",
+    "mcp vulnerability",
+    "agentic skill",
+    "agentic skills",
+    "agent skill",
+    "agent skills",
+    "agent memory",
+    "agentic workflow",
+    "autonomous agent",
+    "prompt injection",
+    "indirect prompt injection",
+    "prompt attack",
+    "llm guardrails",
+    "dynamic guardrails",
+    "llm firewall",
+    "tool poisoning",
+    "function calling abuse",
+    "tool abuse",
+    "agent hijacking",
+    "agent privilege escalation",
+    "ai red teaming",
+    "rag poisoning",
+    "context window overflow",
+    "data exfiltration via llm",
 }
 
 RSS_HINTS = (
@@ -449,10 +488,21 @@ def is_dashboard_specific_tag(item: dict[str, object]) -> bool:
     return label not in GENERIC_DASHBOARD_QUERIES
 
 
+def dashboard_keyword_score(item: dict[str, object]) -> float:
+    label = normalize_for_match(str(item.get("label") or ""))
+    total = float(item.get("total") or 0)
+    score = total
+    if label in TREND_FOCUS_QUERIES:
+        score += 12.0
+    if any(token in label for token in ("mcp", "prompt", "guardrail", "agent", "tool", "rag", "jailbreak")):
+        score += 4.0
+    return score
+
+
 def within_window(dt: datetime | None, windows: list[tuple[datetime, datetime]]) -> bool:
     if not dt:
         return False
-    return windows[0][0] <= dt < windows[-1][1]
+    return windows[0][0] <= dt < windows[-1][1] + timedelta(days=7)
 
 
 def bucket_index(dt: datetime | None, windows: list[tuple[datetime, datetime]], fallback: int) -> int | None:
@@ -541,6 +591,20 @@ def recency_score(published: datetime | None, windows: list[tuple[datetime, date
     return 0.5
 
 
+def document_format_score(doc: dict[str, object]) -> float:
+    text = normalize_for_match(f"{doc.get('title', '')} {doc.get('summary', '')} {doc.get('url', '')}")
+    score = 0.0
+    if any(term in text for term in ("state of", "report", "whitepaper", "guide", "framework", "landscape", "discussion paper", "research note")):
+        score += 4.0
+    if any(term in text for term in ("governance", "risk", "mitigation", "security and governance", "threats and mitigations")):
+        score += 2.0
+    if ".pdf" in text:
+        score += 1.5
+    if any(term in text for term in ("ctf", "summit", "event", "webinar", "workshop", "join us")):
+        score -= 4.0
+    return score
+
+
 def format_doc_reason(doc: dict[str, object]) -> str:
     parts = [
         f"keywords: {', '.join(str(label) for label in doc.get('labels', [])[:4])}",
@@ -554,6 +618,9 @@ def format_doc_reason(doc: dict[str, object]) -> str:
         parts.append(f"{mentions} observed mentions")
     if doc.get("curated"):
         parts.append("verified curated source")
+    format_score = float(doc.get("formatScore", 0))
+    if format_score > 0:
+        parts.append(f"format {format_score:.1f}")
     summary = clean_text(doc.get("summary") or "")
     if summary:
         parts.append(summary[:140])
@@ -640,7 +707,11 @@ def build_output(items: list[Item], keywords: list[dict[str, str]], windows: lis
             totals_by_label[label]["total"] += 1
 
     totals = sorted((item for item in totals_by_label.values() if item["total"] > 0), key=lambda item: item["total"], reverse=True)
-    dashboard_totals = [item for item in totals if is_dashboard_specific_tag(item)]
+    dashboard_totals = sorted(
+        (item for item in totals if is_dashboard_specific_tag(item)),
+        key=lambda item: (dashboard_keyword_score(item), item["total"]),
+        reverse=True,
+    )
     top5 = dashboard_totals[:5]
     chart_keywords = [{"key": item["label"], "color": PALETTE[index % len(PALETTE)]} for index, item in enumerate(top5)]
     chart_series = {item["label"]: series_by_label[item["label"]] for item in top5}
@@ -679,6 +750,9 @@ def build_output(items: list[Item], keywords: list[dict[str, str]], windows: lis
     for doc in doc_scores.values():
         if not doc.get("date"):
             continue
+        format_score = document_format_score(doc)
+        if format_score <= 0:
+            continue
         mentions = int(doc["mentions"])
         referrer_count = len(doc["referrers"])
         citation_score = min(4.0, max(0, mentions - 1) * 0.7 + max(0, referrer_count - 1) * 0.8)
@@ -686,10 +760,12 @@ def build_output(items: list[Item], keywords: list[dict[str, str]], windows: lis
             float(doc["relevanceScore"])
             + float(doc["authorityScore"])
             + float(doc["recencyScore"])
+            + format_score
             + citation_score
         )
         doc["score"] = round(total_score, 2)
         doc["citationScore"] = round(citation_score, 2)
+        doc["formatScore"] = round(format_score, 2)
         doc["why"] = format_doc_reason(doc)
         doc["referrers"] = sorted(doc["referrers"])
         ranked_docs.append(doc)

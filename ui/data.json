@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-06-04T09:49:56Z",
+    "generatedAt": "2026-06-04T10:26:53Z",
     "windowWeeks": 12,
     "mentionsMetric": "rss_html_keyword_matches",
     "source": "Public RSS/HTML scraping",
-    "note": "Parsed 6553 public RSS/HTML items and matched 546 keyword mentions."
+    "note": "Parsed 6428 public RSS/HTML items and matched 559 keyword mentions."
   },
   "weekLabels": [
     "09.03",
@@ -22,91 +22,91 @@
   ],
   "keywords": [
     {
-      "key": "Agentic red teaming",
+      "key": "Agent skills",
       "color": "#22d3ee"
     },
     {
-      "key": "Prompt attack (direct)",
+      "key": "mcp security",
       "color": "#a855f7"
     },
     {
-      "key": "OWASP Top 10 for LLM Applications",
+      "key": "Agentic skills",
       "color": "#60a5fa"
     },
     {
-      "key": "owasp agentic",
+      "key": "Agentic red teaming",
       "color": "#f59e0b"
     },
     {
-      "key": "owasp top 10 llm",
+      "key": "Dynamic guardrails",
       "color": "#34d399"
     }
   ],
   "seriesByKeyword": {
+    "Agent skills": [
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      5
+    ],
+    "mcp security": [
+      0,
+      0,
+      1,
+      1,
+      0,
+      0,
+      1,
+      1,
+      1,
+      0,
+      0,
+      1
+    ],
+    "Agentic skills": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      4
+    ],
     "Agentic red teaming": [
       0,
-      0,
       2,
       2,
-      1,
-      2,
-      0,
       3,
-      1,
-      2,
-      0,
-      0
-    ],
-    "Prompt attack (direct)": [
-      2,
-      1,
-      2,
-      1,
-      1,
       0,
       1,
       0,
-      0,
-      2,
-      1,
-      0
-    ],
-    "OWASP Top 10 for LLM Applications": [
-      0,
-      2,
-      1,
-      2,
-      4,
-      1,
-      1,
-      0,
-      0,
-      0,
-      0,
-      0
-    ],
-    "owasp agentic": [
-      0,
-      0,
-      0,
-      1,
-      0,
-      3,
-      2,
       1,
       1,
       1,
       1,
       1
     ],
-    "owasp top 10 llm": [
+    "Dynamic guardrails": [
       0,
       0,
+      0,
       1,
-      1,
-      4,
-      1,
-      1,
+      0,
+      0,
+      0,
       0,
       0,
       0,
@@ -125,19 +125,19 @@
       "color": "#22d3ee"
     },
     {
-      "key": "owasp agentic",
+      "key": "Agent skills",
       "color": "#a855f7"
     },
     {
-      "key": "owasp agentic ai",
+      "key": "Agentic skills",
       "color": "#60a5fa"
     },
     {
-      "key": "Agentic workflows",
+      "key": "data poisoning",
       "color": "#f59e0b"
     },
     {
-      "key": "Multi-Agent Systems (MAS)",
+      "key": "Agentic workflows",
       "color": "#34d399"
     }
   ],
@@ -147,24 +147,24 @@
       50.0,
       125.0
     ],
-    "owasp agentic": [
+    "Agent skills": [
       0.0,
-      125.0,
-      75.0
+      -50.0,
+      100.0
     ],
-    "owasp agentic ai": [
+    "Agentic skills": [
       0.0,
-      75.0,
+      0.0,
+      100.0
+    ],
+    "data poisoning": [
+      0.0,
+      25.0,
       75.0
     ],
     "Agentic workflows": [
       0.0,
       50.0,
-      50.0
-    ],
-    "Multi-Agent Systems (MAS)": [
-      0.0,
-      25.0,
       50.0
     ]
   },
@@ -205,6 +205,11 @@
       "total": 13
     },
     {
+      "label": "ai vulnerability",
+      "category": "Expanded AI Security Search Terms",
+      "total": 12
+    },
+    {
       "label": "Prompt attack (direct)",
       "category": "Agentic & LLM Attacks",
       "total": 11
@@ -215,14 +220,14 @@
       "total": 11
     },
     {
-      "label": "ai vulnerability",
+      "label": "owasp agentic",
       "category": "Expanded AI Security Search Terms",
       "total": 11
     },
     {
-      "label": "owasp agentic",
-      "category": "Expanded AI Security Search Terms",
-      "total": 11
+      "label": "Agent skills",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 8
     },
     {
       "label": "owasp top 10 llm",
@@ -276,6 +281,11 @@
     },
     {
       "label": "Self-evolving AI agents",
+      "category": "SOTA Technologies & New Agent Architectures",
+      "total": 4
+    },
+    {
+      "label": "Agentic skills",
       "category": "SOTA Technologies & New Agent Architectures",
       "total": 4
     },
@@ -437,39 +447,39 @@
   ],
   "topDocs": [
     {
-      "title": "FinBot CTF Is Live: A Hands-On Companion to the OWASP GenAI Security Project",
+      "title": "State of Agentic AI Security and Governance 2.01",
       "publisher": "genai.owasp.org",
-      "why": "keywords: Multi-Agent Systems (MAS), ai security, genai security, agentic ai security; relevance 20.5; authority 5.0; 2 observed mentions; <p>FinBot is a hands-on companion to the OWASP GenAI Security Project, offering an interactive Capture-The-Flag environment built around a s",
-      "date": "2026-04-15",
-      "url": "https://genai.owasp.org/2026/04/14/finbot-ctf-is-live-a-hands-on-companion-to-the-owasp-genai-security-project/?utm_source=rss&utm_medium=rss&utm_campaign=finbot-ctf-is-live-a-hands-on-companion-to-the-owasp-genai-security-project"
+      "why": "keywords: ai security, genai security, agentic ai security, agentic security; relevance 22.1; authority 5.0; verified curated source; format 6.0; Large-format GenAI security and governance guide for autonomous AI systems, covering agentic application risks, governance models, framework",
+      "date": "2026-06-01",
+      "url": "https://genai.owasp.org/resource/state-of-agentic-ai-security-and-governance/"
     },
     {
       "title": "Google Workspace’s continuous approach to mitigating indirect prompt injections",
       "publisher": "security.googleblog.com",
-      "why": "keywords: Agentic workflows, Prompt attack (direct), Indirect prompt attack, Dynamic guardrails; relevance 20.9; authority 4.0; <span class=\"byline-author\">Posted by Adam Gavish, Google GenAI Security Team</span><div><br /></div><div><span id=\"docs-internal-guid-963e2",
+      "why": "keywords: Agentic workflows, Prompt attack (direct), Indirect prompt attack, Dynamic guardrails; relevance 20.9; authority 4.0; format 2.0; <span class=\"byline-author\">Posted by Adam Gavish, Google GenAI Security Team</span><div><br /></div><div><span id=\"docs-internal-guid-963e2",
       "date": "2026-04-02",
       "url": "http://security.googleblog.com/feeds/7611943504123181983/comments/default"
     },
     {
       "title": "AI threats in the wild: The current state of prompt injections on the web",
       "publisher": "security.googleblog.com",
-      "why": "keywords: Prompt attack (direct), Indirect prompt attack, ai security, llm security; relevance 18.9; authority 4.0; <span class=\"byline-author\">Posted by Thomas Brunner, Yu-Han Liu, Moni Pande</span><div><br /></div><div><span id=\"docs-internal-guid-49e833",
+      "why": "keywords: Prompt attack (direct), Indirect prompt attack, ai security, llm security; relevance 18.9; authority 4.0; format 1.5; <span class=\"byline-author\">Posted by Thomas Brunner, Yu-Han Liu, Moni Pande</span><div><br /></div><div><span id=\"docs-internal-guid-49e833",
       "date": "2026-04-23",
       "url": "http://security.googleblog.com/feeds/820776653483778595/comments/default"
     },
     {
-      "title": "Memory Is a Feature. It Is Also an Attack Surface",
-      "publisher": "genai.owasp.org",
-      "why": "keywords: Episodic and semantic memory architectures, ai security, genai security, ai attack; relevance 16.5; authority 5.0; 2 observed mentions; <p>As co-lead of OWASP ASI06: Memory & Context Poisoning entry as part of OWASP Top 10 for Agentic Applications , I have spent a lot of time",
-      "date": "2026-05-14",
-      "url": "https://genai.owasp.org/2026/05/13/memory-is-a-feature-it-is-also-an-attack-surface/?utm_source=rss&utm_medium=rss&utm_campaign=memory-is-a-feature-it-is-also-an-attack-surface"
-    },
-    {
       "title": "State of AI Cybersecurity 2026: 92% of Security Professionals Concerned About the Impact of AI Agents",
       "publisher": "cloudsecurityalliance.org",
-      "why": "keywords: Autonomous agent instruments, ai security, generative ai security, ai cybersecurity; relevance 14.4; authority 4.7; The findings in this blog are taken from Darktrace's annual State of AI Cybersecurity Report 2026. AI is already embedded in day-to-day ente",
+      "why": "keywords: Autonomous agent instruments, ai security, generative ai security, ai cybersecurity; relevance 14.4; authority 4.7; format 4.0; The findings in this blog are taken from Darktrace's annual State of AI Cybersecurity Report 2026. AI is already embedded in day-to-day ente",
       "date": "2026-05-19",
       "url": "https://cloudsecurityalliance.org/articles/state-of-ai-cybersecurity-2026-92-of-security-professionals-concerned-about-the-impact-of-ai-agents"
+    },
+    {
+      "title": "AI Agent Posture Management: Why Autonomous AI Requires Data-First Security Guardrails",
+      "publisher": "cloudsecurityalliance.org",
+      "why": "keywords: Autonomous agent instruments, AI Security Posture Management (AI-SPM), ai security; relevance 12.5; authority 4.7; format 6.0; AI agents are no longer experimental tools confined to innovation labs. They are already embedded across enterprise environments—reading fil",
+      "date": "2026-05-01",
+      "url": "https://cloudsecurityalliance.org/articles/ai-agent-posture-management-why-autonomous-ai-requires-data-first-security-guardrails"
     }
   ],
   "topSources": [
