@@ -93,7 +93,7 @@ const weekLabels = Array.from({ length: 12 }, (_, i) => {
 
 // Primary path is loading real data from `ui/data.json`.
 const fallbackData = {
-  meta: { generatedAt: null, windowWeeks: 12, note: "No data loaded. Generate ui/data.json with scripts/collect_hn.py." },
+  meta: { generatedAt: null, windowWeeks: 12, note: "No data loaded. Generate ui/data.json with scripts/collect_serpapi.py." },
   keywords: [],
   seriesByKeyword: {},
   topDocs: [],
@@ -105,6 +105,7 @@ async function loadData() {
     const res = await fetch("./data.json", { cache: "no-store" });
     if (!res.ok) return fallbackData;
     const json = await res.json();
+    if (!Array.isArray(json?.keywords) || !json.keywords.length || !json?.seriesByKeyword) return fallbackData;
     return { ...fallbackData, ...json };
   } catch {
     return fallbackData;

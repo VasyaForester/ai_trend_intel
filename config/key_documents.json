@@ -1,5 +1,5 @@
 {
-  "description": "Curated Q2 2026 AI security documents with links verified before inclusion. Used by scripts/collect_hn.py to populate ui/data.json topDocs.",
+  "description": "Curated Q2 2026 AI security documents with links verified before inclusion. Used by scripts/collect_web.py as ranked topDocs candidates alongside scraped RSS/HTML documents.",
   "documents": [
     {
       "title": "State of Agent Security — Q2 2026 (Version 2.0)",

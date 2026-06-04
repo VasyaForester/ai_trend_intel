@@ -244,6 +244,9 @@
       "access": "public",
       "sources": [
         "https://security.googleblog.com",
+        "https://cloudsecurityalliance.org/research/cloudbytes",
+        "https://cloudsecurityalliance.org/research/artifacts",
+        "https://labs.cloudsecurityalliance.org",
         "https://blog.google/technology/ai/",
         "https://blog.google/feed/",
         "https://www.microsoft.com/en-us/security/blog/",

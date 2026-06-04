@@ -43,23 +43,33 @@ The source registry lives in `config/search_sources.json`. Restricted sources (f
 
 The repository includes a lightweight browser UI in `ui/` (no build step). The dashboard reads real trend data from `ui/data.json`.
 
-Regenerate data from SerpAPI web search (primary collector):
+Regenerate dashboard data from public RSS/HTML sources (primary collector, no API key required):
 
 ```powershell
-Copy-Item .env.example .env
+cd "C:\Users\Василий\OneDrive\Desktop\Githuber"
+python scripts/collect_web.py --max-sources 60
+```
+
+This rewrites `ui/data.json`. The collector reads public URLs from `config/search_sources.json`, tries RSS/Atom discovery first, falls back to HTML scraping, matches items against `config/keywords.json`, and writes:
+
+- `keywords`
+- `seriesByKeyword`
+- `keywordTotals`
+- `topSources`
+
+Top documents are ranked, not hard-coded. OWASP, CSA, NIST/MITRE, and big-tech sources receive an authority boost, but every document is still scored by keyword relevance, title relevance, observed mentions, freshness, and source diversity. Verified documents from `config/key_documents.json` are treated as ranked candidates, not unconditional inserts.
+
+Quick check that the UI has collected data:
+
+```powershell
+Select-String -Path ui/data.json -Pattern '"source"', '"keywordTotals"', '"topSources"'
+```
+
+Optional SerpAPI/DuckDuckGo collection remains available for experiments if you have a working SerpAPI key:
+
+```powershell
 powershell -ExecutionPolicy Bypass -File scripts/setup_serpapi_key.ps1
-```
-
-After `.env` is configured, run:
-
-```powershell
-python scripts/collect_serpapi.py --engine google
-```
-
-Hacker News collection remains available as a narrow fallback:
-
-```powershell
-python scripts/collect_hn.py
+python scripts/collect_serpapi.py --engine duckduckgo
 ```
 
 Collect arXiv links once (no API key required):

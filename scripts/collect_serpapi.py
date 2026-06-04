@@ -1,22 +1,19 @@
-"""Collect AI Security trend data from SerpAPI web search.
+"""Collect AI Security trend data from SerpAPI DuckDuckGo search.
 
-This collector replaces the Hacker News-only pipeline with broader web search.
-It reads the keyword taxonomy and source registry, queries SerpAPI, and writes
-`ui/data.json` for the dashboard.
+It reads the keyword taxonomy, queries SerpAPI, and writes `ui/data.json` for
+the dashboard.
 
 Required environment:
     SERPAPI_API_KEY=<your key>
 
 Run:
-    python scripts/collect_serpapi.py
+    python scripts/collect_serpapi.py --engine duckduckgo
 
 Notes:
 - The API key is intentionally read from the environment and must not be
   committed to the repository.
-- Google is the default SerpAPI engine because it supports date operators
-  (`after:` / `before:`) and exposes `search_information.total_results`.
-- DuckDuckGo can be tested with `--engine duckduckgo`, but result counts may be
-  less consistent depending on SerpAPI response fields.
+- DuckDuckGo does not reliably expose total result counts, so keyword volume and
+  source rankings are based on the organic results returned by SerpAPI.
 """
 
 from __future__ import annotations
@@ -24,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
@@ -82,20 +80,16 @@ def avg(values: list[int]) -> float:
 
 
 def growth_percent_points(series: list[int]) -> list[float] | None:
-    """Return [start%, mid%, end%] for monotonic growth, or None."""
+    """Return [start%, mid%, end%] by thirds of the observed time series."""
     if len(series) < 3:
         return None
     chunk = max(1, len(series) // 3)
     start_value = avg(series[:chunk])
     mid_value = avg(series[chunk:chunk * 2])
     end_value = avg(series[chunk * 2:])
-    if mid_value < start_value or end_value < mid_value:
-        return None
     baseline = max(1.0, start_value)
     mid_growth = ((mid_value - start_value) / baseline) * 100
     end_growth = ((end_value - start_value) / baseline) * 100
-    if end_growth <= 0:
-        return None
     return [0.0, round(mid_growth, 2), round(end_growth, 2)]
 
 
@@ -135,24 +129,42 @@ def load_source_registry() -> dict[str, dict[str, object]]:
     return sources
 
 
-def date_query(query: str, start: datetime, end: datetime) -> str:
-    start_date = start.strftime("%Y-%m-%d")
-    end_date = end.strftime("%Y-%m-%d")
-    context = '("AI security" OR "LLM security" OR "AI agent security" OR "agentic AI security")'
-    return f'"{query}" {context} after:{start_date} before:{end_date}'
+def search_queries(query: str) -> list[str]:
+    return [
+        f'"{query}" AI security',
+        f'"{query}" LLM security',
+        f'"{query}" AI agent security',
+        f'"{query}" cybersecurity',
+        f'{query} AI security',
+    ]
 
 
-def full_window_query(query: str, start: datetime, end: datetime) -> str:
-    return date_query(query, start, end)
+def date_filter(start: datetime, end: datetime, engine: str) -> str | None:
+    if engine == "duckduckgo":
+        return f"{start:%Y-%m-%d}..{end:%Y-%m-%d}"
+    return None
 
 
-def serpapi_search(api_key: str, engine: str, query: str, num_results: int, retries: int = 4) -> dict:
+def serpapi_search(
+    api_key: str,
+    engine: str,
+    query: str,
+    num_results: int,
+    date_filter: str | None = None,
+    retries: int = 4,
+) -> dict:
     params = {
         "engine": engine,
         "q": query,
         "api_key": api_key,
-        "num": str(num_results),
     }
+    if engine == "duckduckgo":
+        params["kl"] = "wt-wt"
+        params["m"] = str(num_results)
+        if date_filter:
+            params["df"] = date_filter
+    else:
+        params["num"] = str(num_results)
     url = SERPAPI_URL + "?" + urllib.parse.urlencode(params)
     last_error: Exception | None = None
     for attempt in range(retries):
@@ -160,7 +172,15 @@ def serpapi_search(api_key: str, engine: str, query: str, num_results: int, retr
             req = urllib.request.Request(url, headers={"User-Agent": "ai-trend-intel/1.0 (research)"})
             with urllib.request.urlopen(req, timeout=45) as resp:
                 return json.load(resp)
-        except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, OSError) as exc:
+        except urllib.error.HTTPError as exc:
+            if exc.code in (401, 403):
+                raise RuntimeError(
+                    "SerpAPI rejected SERPAPI_API_KEY. Re-run scripts/setup_serpapi_key.ps1 with a valid key."
+                ) from exc
+            last_error = exc
+            if attempt < retries - 1:
+                time.sleep(min(60, 5 * (attempt + 1)))
+        except (urllib.error.URLError, TimeoutError, OSError) as exc:
             last_error = exc
             if attempt < retries - 1:
                 time.sleep(min(60, 5 * (attempt + 1)))
@@ -169,7 +189,7 @@ def serpapi_search(api_key: str, engine: str, query: str, num_results: int, retr
 
 def result_count(data: dict) -> int:
     info = data.get("search_information") or {}
-    for key in ("total_results", "organic_results_state"):
+    for key in ("total_results",):
         value = info.get(key)
         if isinstance(value, int):
             return value
@@ -182,11 +202,141 @@ def organic_results(data: dict) -> list[dict]:
     return data.get("organic_results") or data.get("results") or []
 
 
-def collect_source_hits(results: list[dict], registry: dict[str, dict[str, object]], counts: dict[str, int]) -> None:
+def normalize_link(url: str | None) -> str | None:
+    if not url:
+        return None
+    parsed = urlparse(url)
+    if not parsed.scheme and not parsed.netloc:
+        return url.strip().lower() or None
+    clean = parsed._replace(fragment="", query="")
+    return clean.geturl().rstrip("/").lower()
+
+
+def parse_result_date(value: object) -> datetime | None:
+    if not value:
+        return None
+    text = str(value).strip()
+    if not text:
+        return None
+
+    iso_match = re.search(r"\d{4}-\d{2}-\d{2}", text)
+    if iso_match:
+        try:
+            return datetime.fromisoformat(iso_match.group(0)).replace(tzinfo=timezone.utc)
+        except ValueError:
+            pass
+
+    for fmt in ("%b %d, %Y", "%B %d, %Y", "%d %b %Y", "%d %B %Y"):
+        try:
+            return datetime.strptime(text, fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+
+    year_match = re.search(r"\b(20\d{2})\b", text)
+    if year_match:
+        try:
+            return datetime(int(year_match.group(1)), 1, 1, tzinfo=timezone.utc)
+        except ValueError:
+            return None
+    return None
+
+
+def result_date(item: dict) -> datetime | None:
+    return parse_result_date(item.get("date_raw")) or parse_result_date(item.get("date"))
+
+
+def bucket_index_for_date(dt: datetime, windows: list[tuple[datetime, datetime]]) -> int | None:
+    for idx, (start, end) in enumerate(windows):
+        if start <= dt < end:
+            return idx
+    return None
+
+
+def fallback_bucket(index: int, total: int, windows_count: int) -> int:
+    if windows_count <= 1:
+        return 0
+    if total <= 1:
+        return windows_count - 1
+    # Undated DuckDuckGo results are relevance-ranked, not time-ranked. Spread them
+    # across the period so sparse date metadata does not collapse every trend to zero.
+    return min(windows_count - 1, int(index * windows_count / total))
+
+
+def collect_keyword_results(
+    api_key: str,
+    engine: str,
+    query: str,
+    num_results: int,
+    window_start: datetime,
+    window_end: datetime,
+    delay_seconds: float,
+) -> list[dict]:
+    seen: set[str] = set()
+    collected: list[dict] = []
+    full_window_filter = date_filter(window_start, window_end, engine)
+
+    for search_query in search_queries(query):
+        variants = [full_window_filter, None] if engine == "duckduckgo" else [None]
+        for current_filter in variants:
+            data = serpapi_search(api_key, engine, search_query, num_results, current_filter)
+            results = organic_results(data)
+            for item in results:
+                key = normalize_link(item.get("link") or item.get("url"))
+                if not key or key in seen:
+                    continue
+                seen.add(key)
+                collected.append(item)
+            if results:
+                break
+        time.sleep(delay_seconds)
+
+    return collected
+
+
+def weekly_series_from_results(results: list[dict], windows: list[tuple[datetime, datetime]]) -> list[int]:
+    series = [0 for _ in windows]
+    undated: list[dict] = []
     for item in results:
-        host = host_of(item.get("link") or item.get("url"))
+        dt = result_date(item)
+        idx = bucket_index_for_date(dt, windows) if dt else None
+        if idx is None:
+            undated.append(item)
+        else:
+            series[idx] += 1
+
+    for index, _item in enumerate(undated):
+        series[fallback_bucket(index, len(undated), len(windows))] += 1
+    return series
+
+
+def source_metadata(host: str, registry: dict[str, dict[str, object]], count: int) -> dict[str, object]:
+    source = registry.get(host)
+    if source:
+        return {**source, "count": count}
+    return {
+        "name": host,
+        "url": f"https://{host}",
+        "category": "duckduckgo_organic_result",
+        "access": "public",
+        "count": count,
+    }
+
+
+def collect_source_hits(
+    results: list[dict],
+    registry: dict[str, dict[str, object]],
+    counts: dict[str, int],
+    seen_links: set[str],
+) -> None:
+    for item in results:
+        link = item.get("link") or item.get("url")
+        host = host_of(link)
         if not host:
             continue
+        dedupe_key = normalize_link(link) or host
+        if dedupe_key in seen_links:
+            continue
+        seen_links.add(dedupe_key)
         matched_host = None
         if host in registry:
             matched_host = host
@@ -195,8 +345,7 @@ def collect_source_hits(results: list[dict], registry: dict[str, dict[str, objec
                 if host.endswith("." + configured_host):
                     matched_host = configured_host
                     break
-        if matched_host:
-            counts[matched_host] = counts.get(matched_host, 0) + 1
+        counts[matched_host or host] = counts.get(matched_host or host, 0) + 1
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -214,34 +363,36 @@ def main(argv: list[str] | None = None) -> int:
     windows = build_windows(now)
     window_start, window_end = windows[0][0], windows[-1][1]
     source_counts: dict[str, int] = {}
+    seen_source_links: set[str] = set()
 
     print(f"Window: {window_start.date()} .. {window_end.date()} ({WINDOW_WEEKS} completed weeks)")
     print(f"Keywords: {len(keywords)}; engine: {args.engine}; registry hosts: {len(registry)}")
 
     totals = []
+    all_series_by_keyword: dict[str, list[int]] = {}
     for index, kw in enumerate(keywords, start=1):
-        q = full_window_query(kw["query"], window_start, window_end)
-        data = serpapi_search(api_key, args.engine, q, args.num_results)
-        total = result_count(data)
-        collect_source_hits(organic_results(data), registry, source_counts)
+        try:
+            results = collect_keyword_results(
+                api_key,
+                args.engine,
+                kw["query"],
+                args.num_results,
+                window_start,
+                window_end,
+                args.delay_seconds,
+            )
+        except RuntimeError as exc:
+            print(f"ERROR: {exc}", file=sys.stderr)
+            return 1
+        weekly = weekly_series_from_results(results, windows)
+        collect_source_hits(results, registry, source_counts, seen_source_links)
+        all_series_by_keyword[kw["label"]] = weekly
+        total = sum(weekly)
         totals.append({"label": kw["label"], "query": kw["query"], "category": kw["category"], "total": total})
-        print(f"  [{index:02d}/{len(keywords):02d}] {total:8d} {kw['label']}")
-        time.sleep(args.delay_seconds)
+        print(f"  [{index:02d}/{len(keywords):02d}] {total:8d} {kw['label']} weekly={weekly}")
 
     totals.sort(key=lambda item: item["total"], reverse=True)
     top5 = totals[:5]
-
-    all_series_by_keyword: dict[str, list[int]] = {}
-    for idx, kw in enumerate(totals):
-        weekly = []
-        for ws, we in windows:
-            q = date_query(kw["query"], ws, we)
-            data = serpapi_search(api_key, args.engine, q, args.num_results)
-            weekly.append(result_count(data))
-            collect_source_hits(organic_results(data), registry, source_counts)
-            time.sleep(args.delay_seconds)
-        all_series_by_keyword[kw["label"]] = weekly
-        print(f"  weekly {kw['label']}: {weekly}")
 
     series_by_keyword = {kw["label"]: all_series_by_keyword[kw["label"]] for kw in top5}
     chart_keywords = [
@@ -265,18 +416,19 @@ def main(argv: list[str] | None = None) -> int:
         for idx, kw in enumerate(growth_top5)
     ]
 
-    top_sources = []
-    for host, count in sorted(source_counts.items(), key=lambda kv: kv[1], reverse=True)[:5]:
-        source = registry[host]
-        top_sources.append({**source, "count": count})
+    observed_sources = [
+        source_metadata(host, count, registry)
+        for host, count in sorted(source_counts.items(), key=lambda kv: kv[1], reverse=True)
+    ]
+    top_sources = observed_sources[:5]
 
     out = {
         "meta": {
             "generatedAt": now.replace(microsecond=0).isoformat().replace("+00:00", "Z"),
             "windowWeeks": WINDOW_WEEKS,
-            "mentionsMetric": "serpapi_weekly_result_count",
+            "mentionsMetric": "serpapi_duckduckgo_organic_results",
             "source": f"SerpAPI ({args.engine})",
-            "note": "Counts are produced from SerpAPI web search over completed weekly windows and matched against config/search_sources.json.",
+            "note": "Counts and sources are parsed from SerpAPI DuckDuckGo organic results; undated results are distributed across the completed window.",
         },
         "weekLabels": [format_week_label(ws) for ws, _ in windows],
         "keywords": chart_keywords,
@@ -289,18 +441,23 @@ def main(argv: list[str] | None = None) -> int:
         ],
         "topDocs": key_documents.get("documents", [])[:5],
         "topSources": top_sources,
+        "observedSources": observed_sources[:25],
     }
-    OUTPUT_PATH.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {OUTPUT_PATH}")
+    output_path = Path(args.output)
+    if not output_path.is_absolute():
+        output_path = ROOT / output_path
+    output_path.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {output_path}")
     return 0
 
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Collect AI Security trend data from SerpAPI.")
-    parser.add_argument("--engine", default="google", choices=["google", "duckduckgo"], help="SerpAPI engine.")
-    parser.add_argument("--num-results", type=int, default=10, help="Organic results to inspect per query.")
+    parser.add_argument("--engine", default="duckduckgo", choices=["duckduckgo", "google"], help="SerpAPI engine.")
+    parser.add_argument("--num-results", type=int, default=35, help="Organic results to inspect per query.")
     parser.add_argument("--delay-seconds", type=float, default=1.0, help="Delay between SerpAPI calls.")
     parser.add_argument("--keyword-limit", type=int, default=None, help="Limit keywords for smoke tests.")
+    parser.add_argument("--output", default=str(OUTPUT_PATH), help="Path to write dashboard data JSON.")
     return parser.parse_args(argv)
 
 
