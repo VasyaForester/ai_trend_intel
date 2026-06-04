@@ -57,6 +57,31 @@ AUTHORITY_DOMAINS = {
     "atlas.mitre.org": 4.0,
 }
 
+GENERIC_DASHBOARD_QUERIES = {
+    "ai security",
+    "llm security",
+    "genai security",
+    "generative ai security",
+    "ai cybersecurity",
+    "ml security",
+    "machine learning security",
+    "ai attack",
+    "llm attack",
+    "genai attack",
+    "ai vulnerability",
+    "llm vulnerability",
+    "genai vulnerability",
+    "ai exploit",
+    "ai cve",
+    "llm cve",
+    "genai cve",
+    "agentic ai security",
+    "agentic security",
+    "ai security framework",
+    "ai security benchmark",
+    "llm security benchmark",
+}
+
 RSS_HINTS = (
     "feed",
     "rss",
@@ -419,11 +444,23 @@ def keyword_matches(item: Item, keywords: list[dict[str, str]], max_matches: int
     return matched
 
 
-def bucket_index(dt: datetime | None, windows: list[tuple[datetime, datetime]], fallback: int) -> int:
+def is_dashboard_specific_tag(item: dict[str, object]) -> bool:
+    label = normalize_for_match(str(item.get("label") or ""))
+    return label not in GENERIC_DASHBOARD_QUERIES
+
+
+def within_window(dt: datetime | None, windows: list[tuple[datetime, datetime]]) -> bool:
+    if not dt:
+        return False
+    return windows[0][0] <= dt < windows[-1][1]
+
+
+def bucket_index(dt: datetime | None, windows: list[tuple[datetime, datetime]], fallback: int) -> int | None:
     if dt:
         for index, (start, end) in enumerate(windows):
             if start <= dt < end:
                 return index
+        return None
     return fallback % len(windows)
 
 
@@ -586,24 +623,30 @@ def build_output(items: list[Item], keywords: list[dict[str, str]], windows: lis
     doc_scores: dict[str, dict[str, object]] = {}
 
     for index, item in enumerate(items):
+        if item.published and not within_window(item.published, windows):
+            continue
         matches = keyword_matches(item, keywords, max_matches=6)
         if not matches:
             continue
         bucket = bucket_index(item.published, windows, index)
+        if bucket is None:
+            continue
         source_counts[item.source_host or host_of(item.url)] = source_counts.get(item.source_host or host_of(item.url), 0) + 1
-        add_doc_candidate(doc_scores, item, matches, windows)
+        if item.published and within_window(item.published, windows):
+            add_doc_candidate(doc_scores, item, matches, windows)
         for match in matches:
             label = match["label"]
             series_by_label[label][bucket] += 1
             totals_by_label[label]["total"] += 1
 
     totals = sorted((item for item in totals_by_label.values() if item["total"] > 0), key=lambda item: item["total"], reverse=True)
-    top5 = totals[:5]
+    dashboard_totals = [item for item in totals if is_dashboard_specific_tag(item)]
+    top5 = dashboard_totals[:5]
     chart_keywords = [{"key": item["label"], "color": PALETTE[index % len(PALETTE)]} for index, item in enumerate(top5)]
     chart_series = {item["label"]: series_by_label[item["label"]] for item in top5}
 
     growth_candidates = []
-    for item in totals:
+    for item in dashboard_totals:
         points = growth_percent_points(series_by_label[item["label"]])
         growth_candidates.append({**item, "growthPoints": points, "growthPercent": points[-1]})
     growth_top5 = sorted(growth_candidates, key=lambda item: (item["growthPercent"], item["total"]), reverse=True)[:5]
@@ -619,6 +662,8 @@ def build_output(items: list[Item], keywords: list[dict[str, str]], windows: lis
     key_documents = json.loads(KEY_DOCUMENTS_PATH.read_text(encoding="utf-8"))
     for document in key_documents.get("documents", []):
         published = parse_date(document.get("date"))
+        if not within_window(published, windows):
+            continue
         curated_item = Item(
             title=clean_text(document.get("title")),
             url=clean_text(document.get("url")),
@@ -632,6 +677,8 @@ def build_output(items: list[Item], keywords: list[dict[str, str]], windows: lis
             add_doc_candidate(doc_scores, curated_item, matches, windows, curated=True)
     ranked_docs = []
     for doc in doc_scores.values():
+        if not doc.get("date"):
+            continue
         mentions = int(doc["mentions"])
         referrer_count = len(doc["referrers"])
         citation_score = min(4.0, max(0, mentions - 1) * 0.7 + max(0, referrer_count - 1) * 0.8)
