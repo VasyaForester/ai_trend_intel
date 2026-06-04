@@ -1,10 +1,10 @@
 {
   "meta": {
-    "generatedAt": "2026-06-04T09:16:37Z",
+    "generatedAt": "2026-06-04T09:23:33Z",
     "windowWeeks": 12,
     "mentionsMetric": "rss_html_keyword_matches",
     "source": "Public RSS/HTML scraping",
-    "note": "Parsed 6411 public RSS/HTML items and matched 919 keyword mentions."
+    "note": "Parsed 6436 public RSS/HTML items and matched 909 keyword mentions."
   },
   "weekLabels": [
     "09.03",
@@ -44,74 +44,74 @@
   ],
   "seriesByKeyword": {
     "ai security": [
-      24,
-      25,
-      31,
-      33,
-      27,
       27,
       26,
       28,
-      23,
-      35,
+      26,
+      19,
+      24,
+      31,
+      29,
       27,
-      36
+      33,
+      31,
+      32
     ],
     "ai cybersecurity": [
       4,
-      0,
-      6,
-      4,
-      3,
-      3,
-      5,
-      4,
-      5,
+      1,
+      7,
       5,
       2,
+      5,
+      6,
+      3,
+      5,
+      5,
+      3,
       10
     ],
     "genai security": [
-      3,
-      5,
       2,
       6,
+      3,
+      3,
+      2,
+      6,
+      8,
       1,
-      7,
+      3,
       5,
       2,
-      4,
-      4,
-      4,
-      2
+      4
     ],
     "agentic security": [
-      5,
-      2,
-      2,
       4,
+      4,
+      5,
       3,
+      4,
       7,
-      3,
+      5,
       1,
-      5,
+      3,
       2,
-      5,
-      4
+      3,
+      3
     ],
     "agentic ai security": [
       3,
-      1,
-      1,
-      4,
       3,
       5,
-      3,
-      1,
-      4,
       2,
       4,
-      4
+      4,
+      5,
+      1,
+      2,
+      2,
+      2,
+      3
     ]
   },
   "growthLabels": [
@@ -121,63 +121,63 @@
   ],
   "growthKeywords": [
     {
-      "key": "generative ai security",
+      "key": "ai attack",
       "color": "#22d3ee"
     },
     {
-      "key": "mcp security",
+      "key": "Episodic and semantic memory architectures",
       "color": "#a855f7"
     },
     {
-      "key": "Self-evolving AI agents",
+      "key": "Autonomous agent instruments",
       "color": "#60a5fa"
     },
     {
-      "key": "data poisoning",
+      "key": "Multi-Agent Systems (MAS)",
       "color": "#f59e0b"
     },
     {
-      "key": "aibom",
+      "key": "Agentic workflows",
       "color": "#34d399"
     }
   ],
   "growthSeriesByKeyword": {
-    "generative ai security": [
+    "ai attack": [
+      0.0,
+      50.0,
+      100.0
+    ],
+    "Episodic and semantic memory architectures": [
       0.0,
       0.0,
       75.0
     ],
-    "mcp security": [
+    "Autonomous agent instruments": [
       0.0,
       0.0,
-      75.0
+      50.0
     ],
-    "Self-evolving AI agents": [
+    "Multi-Agent Systems (MAS)": [
       0.0,
       25.0,
-      75.0
+      50.0
     ],
-    "data poisoning": [
+    "Agentic workflows": [
       0.0,
-      -25.0,
-      75.0
-    ],
-    "aibom": [
-      0.0,
-      25.0,
-      75.0
+      100.0,
+      50.0
     ]
   },
   "keywordTotals": [
     {
       "label": "ai security",
       "category": "Expanded AI Security Search Terms",
-      "total": 342
+      "total": 333
     },
     {
       "label": "ai cybersecurity",
       "category": "Expanded AI Security Search Terms",
-      "total": 51
+      "total": 56
     },
     {
       "label": "genai security",
@@ -187,22 +187,17 @@
     {
       "label": "agentic security",
       "category": "Expanded AI Security Search Terms",
-      "total": 43
+      "total": 44
     },
     {
       "label": "agentic ai security",
       "category": "Expanded AI Security Search Terms",
-      "total": 35
+      "total": 36
     },
     {
       "label": "Prompt attack (direct)",
       "category": "Agentic & LLM Attacks",
-      "total": 25
-    },
-    {
-      "label": "machine learning security",
-      "category": "Expanded AI Security Search Terms",
-      "total": 22
+      "total": 21
     },
     {
       "label": "ai vulnerability",
@@ -210,8 +205,18 @@
       "total": 21
     },
     {
+      "label": "machine learning security",
+      "category": "Expanded AI Security Search Terms",
+      "total": 20
+    },
+    {
       "label": "Agentic red teaming",
       "category": "Defenses & Security Engineering",
+      "total": 18
+    },
+    {
+      "label": "ai attack",
+      "category": "Expanded AI Security Search Terms",
       "total": 18
     },
     {
@@ -220,19 +225,14 @@
       "total": 18
     },
     {
-      "label": "llm security",
+      "label": "generative ai security",
       "category": "Expanded AI Security Search Terms",
       "total": 17
     },
     {
-      "label": "ai attack",
+      "label": "llm security",
       "category": "Expanded AI Security Search Terms",
       "total": 16
-    },
-    {
-      "label": "generative ai security",
-      "category": "Expanded AI Security Search Terms",
-      "total": 15
     },
     {
       "label": "ai security framework",
@@ -250,14 +250,19 @@
       "total": 12
     },
     {
-      "label": "owasp agentic ai",
-      "category": "Expanded AI Security Search Terms",
+      "label": "Autonomous agent instruments",
+      "category": "SOTA Technologies & New Agent Architectures",
       "total": 11
     },
     {
       "label": "ai exploit",
       "category": "Expanded AI Security Search Terms",
-      "total": 10
+      "total": 11
+    },
+    {
+      "label": "owasp agentic ai",
+      "category": "Expanded AI Security Search Terms",
+      "total": 11
     },
     {
       "label": "Multi-Agent Systems (MAS)",
@@ -267,16 +272,6 @@
     {
       "label": "Agentic workflows",
       "category": "SOTA Technologies & New Agent Architectures",
-      "total": 9
-    },
-    {
-      "label": "Autonomous agent instruments",
-      "category": "SOTA Technologies & New Agent Architectures",
-      "total": 9
-    },
-    {
-      "label": "mcp security",
-      "category": "Expanded AI Security Search Terms",
       "total": 9
     },
     {
@@ -290,6 +285,11 @@
       "total": 8
     },
     {
+      "label": "mcp security",
+      "category": "Expanded AI Security Search Terms",
+      "total": 8
+    },
+    {
       "label": "owasp top 10 llm",
       "category": "Expanded AI Security Search Terms",
       "total": 8
@@ -298,11 +298,6 @@
       "label": "Self-evolving AI agents",
       "category": "SOTA Technologies & New Agent Architectures",
       "total": 7
-    },
-    {
-      "label": "adversarial examples",
-      "category": "Expanded AI Security Search Terms",
-      "total": 6
     },
     {
       "label": "llm vulnerability",
@@ -350,7 +345,7 @@
       "total": 3
     },
     {
-      "label": "Trajectory anomaly detection",
+      "label": "AI Security Posture Management (AI-SPM)",
       "category": "Defenses & Security Engineering",
       "total": 3
     },
@@ -375,11 +370,6 @@
       "total": 3
     },
     {
-      "label": "adversarial attacks",
-      "category": "Expanded AI Security Search Terms",
-      "total": 3
-    },
-    {
       "label": "ai agent vulnerability",
       "category": "Expanded AI Security Search Terms",
       "total": 3
@@ -391,6 +381,11 @@
     },
     {
       "label": "gpu security",
+      "category": "Expanded AI Security Search Terms",
+      "total": 3
+    },
+    {
+      "label": "ai firewall",
       "category": "Expanded AI Security Search Terms",
       "total": 3
     },
@@ -425,11 +420,6 @@
       "total": 2
     },
     {
-      "label": "AI Security Posture Management (AI-SPM)",
-      "category": "Defenses & Security Engineering",
-      "total": 2
-    },
-    {
       "label": "Data lineage and provenance",
       "category": "Governance, Risk & Frameworks",
       "total": 2
@@ -445,7 +435,7 @@
       "total": 2
     },
     {
-      "label": "adversarial machine learning",
+      "label": "adversarial attacks",
       "category": "Expanded AI Security Search Terms",
       "total": 2
     },
@@ -456,11 +446,6 @@
     },
     {
       "label": "tool abuse",
-      "category": "Expanded AI Security Search Terms",
-      "total": 2
-    },
-    {
-      "label": "ai firewall",
       "category": "Expanded AI Security Search Terms",
       "total": 2
     },
@@ -487,6 +472,11 @@
     {
       "label": "AI supply chain attacks (including compromised MCP servers)",
       "category": "Agentic & LLM Attacks",
+      "total": 1
+    },
+    {
+      "label": "Trajectory anomaly detection",
+      "category": "Defenses & Security Engineering",
       "total": 1
     },
     {
@@ -530,6 +520,16 @@
       "total": 1
     },
     {
+      "label": "adversarial machine learning",
+      "category": "Expanded AI Security Search Terms",
+      "total": 1
+    },
+    {
+      "label": "adversarial examples",
+      "category": "Expanded AI Security Search Terms",
+      "total": 1
+    },
+    {
       "label": "trojan attack",
       "category": "Expanded AI Security Search Terms",
       "total": 1
@@ -560,7 +560,7 @@
       "total": 1
     },
     {
-      "label": "privacy-preserving machine learning",
+      "label": "iso 42001",
       "category": "Expanded AI Security Search Terms",
       "total": 1
     },
@@ -586,25 +586,25 @@
       "url": "https://genai.owasp.org/2025/12/09/owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai/?utm_source=rss&utm_medium=rss&utm_campaign=owasp-top-10-for-agentic-applications-the-benchmark-for-agentic-security-in-the-age-of-autonomous-ai"
     },
     {
-      "title": "Join us in London, 6/2 – 6/4 InfoSecurity Europe – OWASP GenAI and Agentic Security Summit",
-      "publisher": "genai.owasp.org",
-      "why": "keywords: ai security, genai security, agentic ai security, agentic security; relevance 21.4; authority 5.0; 4 observed mentions",
-      "date": "",
-      "url": "https://genai.owasp.org/event/owasp-gen-ai-security-summit-london/"
+      "title": "Google Workspace’s continuous approach to mitigating indirect prompt injections",
+      "publisher": "security.googleblog.com",
+      "why": "keywords: Agentic workflows, Prompt attack (direct), Indirect prompt attack, Dynamic guardrails; relevance 20.9; authority 4.0; <span class=\"byline-author\">Posted by Adam Gavish, Google GenAI Security Team</span><div><br /></div><div><span id=\"docs-internal-guid-963e2",
+      "date": "2026-04-02",
+      "url": "http://security.googleblog.com/feeds/7611943504123181983/comments/default"
     },
     {
-      "title": "FinBot CTF Is Live: A Hands-On Companion to the OWASP GenAI Security Project",
-      "publisher": "genai.owasp.org",
-      "why": "keywords: Multi-Agent Systems (MAS), ai security, genai security, agentic ai security; relevance 20.5; authority 5.0; 2 observed mentions; <p>FinBot is a hands-on companion to the OWASP GenAI Security Project, offering an interactive Capture-The-Flag environment built around a s",
-      "date": "2026-04-15",
-      "url": "https://genai.owasp.org/2026/04/14/finbot-ctf-is-live-a-hands-on-companion-to-the-owasp-genai-security-project/?utm_source=rss&utm_medium=rss&utm_campaign=finbot-ctf-is-live-a-hands-on-companion-to-the-owasp-genai-security-project"
+      "title": "AI threats in the wild: The current state of prompt injections on the web",
+      "publisher": "security.googleblog.com",
+      "why": "keywords: Prompt attack (direct), Indirect prompt attack, ai security, llm security; relevance 18.9; authority 4.0; <span class=\"byline-author\">Posted by Thomas Brunner, Yu-Han Liu, Moni Pande</span><div><br /></div><div><span id=\"docs-internal-guid-49e833",
+      "date": "2026-04-23",
+      "url": "http://security.googleblog.com/feeds/820776653483778595/comments/default"
     },
     {
-      "title": "AI Security Solutions Landscape For AI and Agentic Red Teaming Q2 2026",
-      "publisher": "genai.owasp.org",
-      "why": "keywords: Agentic red teaming, ai security, genai security, agentic ai security; relevance 22.6; authority 5.0",
-      "date": "",
-      "url": "https://genai.owasp.org/resource/ai-security-solutions-landscape-for-ai-and-agentic-red-teaming-q2-2026/"
+      "title": "State of AI Cybersecurity 2026: 92% of Security Professionals Concerned About the Impact of AI Agents",
+      "publisher": "cloudsecurityalliance.org",
+      "why": "keywords: Autonomous agent instruments, ai security, generative ai security, ai cybersecurity; relevance 14.4; authority 4.7; The findings in this blog are taken from Darktrace's annual State of AI Cybersecurity Report 2026. AI is already embedded in day-to-day ente",
+      "date": "2026-05-19",
+      "url": "https://cloudsecurityalliance.org/articles/state-of-ai-cybersecurity-2026-92-of-security-professionals-concerned-about-the-impact-of-ai-agents"
     }
   ],
   "topSources": [
